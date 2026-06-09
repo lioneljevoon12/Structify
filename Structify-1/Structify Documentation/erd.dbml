@@ -1,0 +1,176 @@
+Project Structify {
+  database_type: "MySQL"
+  Note: "Structify Learning Platform"
+}
+
+Enum user_role {
+  user
+  admin
+  developer
+}
+
+Table users {
+  id bigint [pk, increment]
+
+  name varchar(100)
+  email varchar(255) [unique]
+  password varchar(255)
+
+  role user_role [default: 'user']
+
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table tracks {
+  id bigint [pk, increment]
+
+  name varchar(100)
+  slug varchar(100) [unique]
+  description text
+  icon varchar(100)
+
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table topics {
+  id bigint [pk, increment]
+
+  track_id bigint [not null]
+
+  title varchar(255)
+  slug varchar(255) [unique]
+
+  description text
+
+  display_order int
+
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table questions {
+  id bigint [pk, increment]
+
+  topic_id bigint [not null]
+
+  question_text text
+
+  option_a text
+  option_b text
+  option_c text
+  option_d text
+
+  correct_answer char(1)
+
+  timer_seconds int [default: 30]
+
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table quiz_attempts {
+  id bigint [pk, increment]
+
+  user_id bigint [not null]
+  topic_id bigint [not null]
+
+  score decimal(5,2)
+
+  total_questions int
+  correct_answers int
+
+  completed_at timestamp
+
+  created_at timestamp
+}
+
+Table quiz_attempt_answers {
+  id bigint [pk, increment]
+
+  quiz_attempt_id bigint [not null]
+  question_id bigint [not null]
+
+  selected_answer char(1)
+
+  is_correct boolean
+
+  created_at timestamp
+}
+
+Table forum_posts {
+  id bigint [pk, increment]
+
+  user_id bigint [not null]
+  topic_id bigint [not null]
+
+  parent_id bigint
+
+  title varchar(255)
+  body text
+
+  upvotes int [default: 0]
+
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table tags {
+  id bigint [pk, increment]
+
+  name varchar(100)
+  slug varchar(100) [unique]
+
+  created_at timestamp
+}
+
+Table forum_post_tags {
+  forum_post_id bigint
+  tag_id bigint
+
+  indexes {
+    (forum_post_id, tag_id) [pk]
+  }
+}
+
+Table user_progress {
+  id bigint [pk, increment]
+
+  user_id bigint [not null]
+  topic_id bigint [not null]
+
+  is_completed boolean [default: false]
+
+  completion_percentage int [default: 0]
+
+  last_visited_at timestamp
+
+  created_at timestamp
+  updated_at timestamp
+}
+
+/* ======================
+   RELATIONSHIPS
+====================== */
+
+Ref: topics.track_id > tracks.id
+
+Ref: questions.topic_id > topics.id
+
+Ref: quiz_attempts.user_id > users.id
+Ref: quiz_attempts.topic_id > topics.id
+
+Ref: quiz_attempt_answers.quiz_attempt_id > quiz_attempts.id
+Ref: quiz_attempt_answers.question_id > questions.id
+
+Ref: forum_posts.user_id > users.id
+Ref: forum_posts.topic_id > topics.id
+
+Ref: forum_posts.parent_id > forum_posts.id
+
+Ref: forum_post_tags.forum_post_id > forum_posts.id
+Ref: forum_post_tags.tag_id > tags.id
+
+Ref: user_progress.user_id > users.id
+Ref: user_progress.topic_id > topics.id
