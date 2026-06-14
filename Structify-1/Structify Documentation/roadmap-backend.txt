@@ -1,0 +1,84 @@
+Roadmap pengembangan backend Laravel 10 — Structify. Klik chip endpoint untuk melihat contoh response. Total 5 fase dalam 8 minggu.
+
+Fase 1
+Project Setup & Auth System
+Week 1–2
+Setup awal
+⚙
+Laravel 10 + Sanctum installation wajib
+Install Laravel 10, PHP 8.2, Laravel Sanctum, setup .env untuk MySQL, konfigurasi CORS untuk React & Flutter.
+composer create-project laravel/laravel
+laravel/sanctum
+fruitcake/laravel-cors
+🗄
+Database migration — semua tabel wajib
+Buat migration untuk: users (dengan enum role), tracks, topics, questions, quiz_attempts, quiz_attempt_answers, forum_posts, tags, forum_post_tags, user_progress. Jalankan seeder awal untuk tracks & topics.
+users migration
+role enum
+Auth API endpoints
+🔐
+Auth Controller (FR-01) wajib
+Buat AuthController dengan 4 method utama. Validasi input dengan Form Request. Return token Sanctum setelah login/register.
+routes/api.php
+POST /login response
+GET /me response
+🛡
+Role middleware wajib
+Buat middleware IsAdmin dan IsAdminOrDeveloper. Daftarkan di Kernel. Gunakan di semua route admin nanti.
+IsAdmin middleware
+✅ Output fase ini: Auth berjalan di web & mobile. Token Sanctum bisa dipakai React & Flutter.
+Fase 2
+Cheatsheet & Progress System
+Week 3–4
+📚
+Track & Topic endpoints (FR-02) wajib
+TrackController dan TopicController — public, tidak perlu auth. Return data termasuk daftar topik per track. Seeder untuk 4 track + semua topik.
+routes tracks/topics
+GET /tracks response
+GET /topics/{id} response
+📊
+Progress Tracker (FR-02) wajib
+UserProgressController — authenticated. Update is_completed dan last_visited_at saat user membuka/menyelesaikan topik. Endpoint get progress per track.
+progress routes
+PATCH progress
+✅ Output fase ini: User bisa browse 4 track, akses topik, dan progress tersimpan.
+Fase 3
+Quiz System & Admin Builder
+Week 5–6
+🎯
+QuizController — user flow (FR-03) wajib
+Endpoint untuk ambil soal per topik (tanpa correct_answer), submit jawaban, dan get hasil. Simpan ke quiz_attempts dan quiz_attempt_answers.
+quiz routes
+GET soal quiz
+POST submit quiz
+🔧
+Admin Soal Builder (FR-04) wajib
+CRUD soal kuis oleh admin. Protected dengan IsAdmin middleware. Validasi: correct_answer harus A/B/C/D, timer_seconds wajib ada.
+admin quiz routes
+POST store question
+✅ Output fase ini: Admin bisa buat soal, user bisa kuis + lihat riwayat nilai.
+Fase 4
+Community Forum
+Week 7
+💬
+ForumPostController (FR-05) sekunder
+CRUD post forum. Self-referencing untuk reply (parent_id). Upvote dengan increment/decrement. Tag via pivot table forum_post_tags. Nested reply pakai rekursi atau eager load.
+forum routes
+POST create post
+GET forum list
+⚠️ Dikerjakan hanya jika Fase 1–3 selesai tepat waktu.
+Fase 5
+Admin Dashboard & Finalisasi
+Week 8
+📈
+Analytics API (FR-04) nice to have
+Endpoint analitik minimal viable: jumlah user aktif (login 30 hari terakhir), topik terpopuler berdasarkan quiz_attempts, rata-rata skor per topik.
+GET /admin/analytics
+👥
+User Management Admin wajib
+Endpoint lihat daftar user, ban user (set is_banned atau soft delete), promote role user → admin.
+admin user routes
+🧪
+Testing & bug fix
+Feature test untuk semua endpoint auth, quiz, forum. Postman collection untuk handoff ke React/Flutter. Deploy ke server staging.
+✅ Output fase ini: Aplikasi siap demo. Semua endpoint terdokumentasi di Postman.
