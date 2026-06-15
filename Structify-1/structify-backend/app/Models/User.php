@@ -24,7 +24,9 @@ class User extends Authenticatable
         'role',
     ];
 
-
+protected $attributes = [
+    'role' => 'user',
+];
 public function quizAttempts() {
     return $this->hasMany(QuizAttempt::class);
 }
