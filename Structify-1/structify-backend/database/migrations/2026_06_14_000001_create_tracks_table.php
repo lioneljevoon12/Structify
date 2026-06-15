@@ -7,16 +7,16 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     public function up(): void
-    {
-        Schema::create('tracks', function (Blueprint $table) {
-            $table->id();
-            $table->string('title', 255);
-            $table->string('slug', 255)->unique();
-            $table->text('description')->nullable();
-            $table->integer('display_order')->default(0);
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('tracks', function (Blueprint $table) {
+        $table->id();
+        $table->string('name', 100);
+        $table->string('slug', 100)->unique();
+        $table->text('description')->nullable();
+        $table->string('icon', 100)->nullable();
+        $table->timestamps();
+    });
+}
 
     public function down(): void
     {
