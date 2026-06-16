@@ -19,11 +19,12 @@ class User extends Authenticatable
      */
     protected $fillable = [
     'name', 'email', 'password', 'role',
-    'username', 'avatar', 'bio',
+    'username', 'avatar', 'bio','is_banned',
     ];
 
     protected $attributes = [
         'role' => 'user',
+        'is_banned' => false,
     ];
     public function quizAttempts() {
         return $this->hasMany(QuizAttempt::class);
@@ -52,5 +53,6 @@ class User extends Authenticatable
          */
         protected $casts = [
             'email_verified_at' => 'datetime',
+            'is_banned' => 'boolean',
         ];
 }

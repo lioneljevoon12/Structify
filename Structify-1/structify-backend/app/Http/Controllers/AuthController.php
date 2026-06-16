@@ -33,29 +33,36 @@ class AuthController extends Controller
         ], 201);
     }
 
-    public function login(LoginRequest $request)
-    {
-        $user = User::where('email', $request->email)->first();
+public function login(LoginRequest $request)
+{
+    $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['Email atau password salah.'],
-            ]);
-        }
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'message' => 'Login berhasil',
-            'user'    => [
-                'id'    => $user->id,
-                'name'  => $user->name,
-                'email' => $user->email,
-                'role'  => $user->role,
-            ],
-            'token' => $token,
+    if (!$user || !Hash::check($request->password, $user->password)) {
+        throw ValidationException::withMessages([
+            'email' => ['Email atau password salah.'],
         ]);
     }
+
+    if ($user->is_banned) {
+        return response()->json([
+            'message' => 'Akun kamu telah dibanned. Hubungi admin.'
+        ], 403);
+    }
+
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    return response()->json([
+        'message' => 'Login berhasil',
+        'user'    => [
+            'id'       => $user->id,
+            'name'     => $user->name,
+            'username' => $user->username,
+            'email'    => $user->email,
+            'role'     => $user->role,
+        ],
+        'token' => $token,
+    ]);
+}
 
     public function logout(Request $request)
     {

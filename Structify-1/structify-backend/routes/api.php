@@ -7,6 +7,8 @@ use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserProgressController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\Admin\AdminQuestionController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AdminAnalyticsController;
 use App\Http\Controllers\ProfileController;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -39,6 +41,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('questions',       [AdminQuestionController::class, 'store']);
         Route::put('questions/{id}',   [AdminQuestionController::class, 'update']);
         Route::delete('questions/{id}',[AdminQuestionController::class, 'destroy']);
+
+        Route::get('users',                  [AdminUserController::class, 'index']);
+        Route::get('users/{id}',             [AdminUserController::class, 'show']);
+        Route::patch('users/{id}/ban',       [AdminUserController::class, 'ban']);
+        Route::patch('users/{id}/promote',   [AdminUserController::class, 'promote']);
+
+        Route::get('analytics', [AdminAnalyticsController::class, 'index']);
     });
 
 });
