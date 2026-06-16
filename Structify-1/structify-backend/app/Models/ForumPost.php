@@ -35,4 +35,10 @@ class ForumPost extends Model
     public function tags() {
         return $this->belongsToMany(Tag::class, 'forum_post_tags');
     }
+
+    public function upvoters()
+    {
+        return $this->belongsToMany(User::class, 'forum_post_upvotes')
+                    ->withTimestamps();
+    }
 }

@@ -11,8 +11,12 @@ use Illuminate\Support\Str;
 
 class ForumPostController extends Controller
 {
+    
+
     public function index(Request $request)
     {
+        $userId = $request->user()?->id;
+
         $posts = ForumPost::whereNull('parent_id')
             ->with([
                 'user:id,name,username,avatar',
@@ -20,6 +24,11 @@ class ForumPostController extends Controller
                 'tags:id,name,slug',
             ])
             ->withCount('replies')
+            ->when($userId, fn($q) =>
+                $q->withExists(['upvoters as is_upvoted' => fn($q) =>
+                    $q->where('user_id', $userId)
+                ])
+            )
             ->when($request->topic_id, fn($q) =>
                 $q->where('topic_id', $request->topic_id)
             )
@@ -30,7 +39,7 @@ class ForumPostController extends Controller
             )
             ->when($request->search, fn($q) =>
                 $q->where('title', 'like', "%{$request->search}%")
-                  ->orWhere('body', 'like', "%{$request->search}%")
+                ->orWhere('body', 'like', "%{$request->search}%")
             )
             ->orderByDesc('created_at')
             ->paginate(15);
@@ -72,6 +81,8 @@ class ForumPostController extends Controller
 
     public function show($id)
     {
+        $userId = $request->user()?->id;
+
         $post = ForumPost::with([
             'user:id,name,username,avatar',
             'topic:id,title,slug',
@@ -81,6 +92,11 @@ class ForumPostController extends Controller
             'replies.nestedReplies.nestedReplies.user:id,name,username,avatar',
         ])
         ->withCount('replies')
+        ->when($userId, fn($q) =>
+            $q->withExists(['upvoters as is_upvoted' => fn($q) =>
+                $q->where('user_id', $userId)
+            ])
+        )
         ->findOrFail($id);
 
         return response()->json(['data' => $post]);
@@ -116,11 +132,27 @@ class ForumPostController extends Controller
     public function upvote(Request $request, $id)
     {
         $post = ForumPost::findOrFail($id);
-        $post->increment('upvotes');
+        $user = $request->user();
+
+        // Cek apakah sudah upvote
+        $alreadyUpvoted = $post->upvoters()->where('user_id', $user->id)->exists();
+
+        if ($alreadyUpvoted) {
+            // Cancel upvote
+            $post->upvoters()->detach($user->id);
+            $post->decrement('upvotes');
+            $status = 'removed';
+        } else {
+            // Upvote
+            $post->upvoters()->attach($user->id);
+            $post->increment('upvotes');
+            $status = 'added';
+        }
 
         return response()->json([
-            'message' => 'Upvote berhasil',
-            'upvotes' => $post->upvotes,
+            'message'    => $status === 'added' ? 'Upvote berhasil' : 'Upvote dibatalkan',
+            'upvotes'    => $post->fresh()->upvotes,
+            'is_upvoted' => $status === 'added',
         ]);
     }
 

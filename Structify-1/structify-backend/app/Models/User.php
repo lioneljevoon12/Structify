@@ -55,4 +55,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'is_banned' => 'boolean',
         ];
+
+        public function upvotedPosts()  {
+            return $this->belongsToMany(ForumPost::class, 'forum_post_upvotes')
+                        ->withTimestamps();
+        }
 }
