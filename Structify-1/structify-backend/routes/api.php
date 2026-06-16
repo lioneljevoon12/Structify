@@ -7,6 +7,7 @@ use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserProgressController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\Admin\AdminQuestionController;
+use App\Http\Controllers\ProfileController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login',    [AuthController::class, 'login']);
@@ -28,6 +29,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/quiz/submit',          [QuizController::class, 'submit']);
     Route::get('/me/quiz-history',       [QuizController::class, 'history']);
     Route::get('/me/quiz-history/{id}',  [QuizController::class, 'detail']);
+
+    Route::get('/profile',           [ProfileController::class, 'show']);
+    Route::post('/profile',          [ProfileController::class, 'update']);
+    Route::delete('/profile/avatar', [ProfileController::class, 'deleteAvatar']);
 
      Route::middleware('role.admin')->prefix('admin')->group(function () {
         Route::get('questions',        [AdminQuestionController::class, 'index']);

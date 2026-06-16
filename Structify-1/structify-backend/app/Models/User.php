@@ -18,41 +18,39 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role',
+    'name', 'email', 'password', 'role',
+    'username', 'avatar', 'bio',
     ];
 
-protected $attributes = [
-    'role' => 'user',
-];
-public function quizAttempts() {
-    return $this->hasMany(QuizAttempt::class);
-}
-public function forumPosts() {
-    return $this->hasMany(ForumPost::class);
-}
-public function progress() {
-    return $this->hasMany(UserProgress::class);
-}
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
+    protected $attributes = [
+        'role' => 'user',
     ];
+    public function quizAttempts() {
+        return $this->hasMany(QuizAttempt::class);
+    }
+    public function forumPosts() {
+        return $this->hasMany(ForumPost::class);
+    }
+    public function progress() {
+        return $this->hasMany(UserProgress::class);
+    }
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+        /**
+         * The attributes that should be hidden for serialization.
+         *
+         * @var array<int, string>
+         */
+        protected $hidden = [
+            'password',
+            'remember_token',
+        ];
+
+        /**
+         * The attributes that should be cast.
+         *
+         * @var array<string, string>
+         */
+        protected $casts = [
+            'email_verified_at' => 'datetime',
+        ];
 }
