@@ -1,0 +1,1106 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F7F8FC;--bg2:#FFFFFF;--bg3:#F0F2F8;--bg4:#E8EBF4;
+  --border:#E2E6F0;--border2:#CDD3E8;
+  --purple:#5B4FD4;--purple2:#7B70E8;--purple-light:#EEF0FF;--purple-mid:#D4D0FF;
+  --teal:#0EA874;--teal-light:#E6F9F2;--teal-mid:#A3E8CF;
+  --text:#1A1D2E;--text2:#4B5280;--text3:#8B93B8;
+  --green:#16A34A;--green-light:#DCFCE7;
+  --amber:#D97706;--amber-light:#FEF3C7;
+  --red:#DC2626;--red-light:#FEE2E2;
+  --sidebar-w:220px;
+  --font:Inter,system-ui,sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.6;overflow-x:hidden}
+.sr-only{position:absolute;width:1px;height:1px;clip:rect(0,0,0,0);overflow:hidden}
+
+/* ── SIDEBAR ── */
+.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100}
+.logo{padding:18px 20px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.logo-icon{width:32px;height:32px;background:var(--purple);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;flex-shrink:0;letter-spacing:-.5px}
+.logo-text{font-size:15px;font-weight:700;color:var(--text)}
+.logo-sub{font-size:9.5px;color:var(--text3);letter-spacing:.8px;text-transform:uppercase;margin-top:1px}
+.nav{flex:1;padding:10px 0;overflow-y:auto}
+.nav-section{padding:14px 16px 5px;font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.7px;text-transform:uppercase}
+.ni{display:flex;align-items:center;gap:9px;padding:8px 14px;color:var(--text2);cursor:pointer;font-size:13px;border-radius:8px;margin:1px 8px;transition:all .15s;position:relative}
+.ni:hover{background:var(--bg3);color:var(--text)}
+.ni.active{background:var(--purple-light);color:var(--purple);font-weight:500}
+.ni i{font-size:16px;opacity:.7;flex-shrink:0}
+.ni.active i{opacity:1}
+.nbadge{margin-left:auto;background:var(--purple);color:#fff;font-size:10px;padding:1px 7px;border-radius:20px;font-weight:500}
+.sidebar-footer{padding:14px;border-top:1px solid var(--border)}
+.ucard{display:flex;align-items:center;gap:9px}
+.uavatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--teal));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;flex-shrink:0}
+.uname{font-size:12.5px;font-weight:500}
+.urole{font-size:11px;color:var(--text3)}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sidebar-w);min-height:100vh}
+.topbar{height:54px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:14px;position:sticky;top:0;z-index:50}
+.tbtitle{font-size:14px;font-weight:600;flex:1;color:var(--text)}
+.searchbox{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:7px 12px;width:220px}
+.searchbox input{background:none;border:none;outline:none;color:var(--text);font-size:12.5px;width:100%}
+.searchbox input::placeholder{color:var(--text3)}
+.tbtn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2)}
+.tbtn:hover{background:var(--bg3)}
+
+/* ── PAGES ── */
+.page{display:none;animation:fi .18s ease}
+.page.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CARDS ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px}
+.cardsm{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+
+/* ── STAT CARDS ── */
+.statcard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px 20px}
+.statlabel{font-size:11.5px;color:var(--text3);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.statlabel i{font-size:14px}
+.statval{font-size:26px;font-weight:700;line-height:1.1}
+.statsub{font-size:11.5px;color:var(--text3);margin-top:5px}
+.statsub b{font-weight:500}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500}
+.bp{background:var(--purple-light);color:var(--purple)}
+.bt{background:var(--teal-light);color:var(--teal)}
+.bg{background:var(--green-light);color:var(--green)}
+.ba{background:var(--amber-light);color:var(--amber)}
+.br{background:var(--red-light);color:var(--red)}
+.bgr{background:var(--bg3);color:var(--text2)}
+
+/* ── TRACK CARDS ── */
+.tcard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px;cursor:pointer;transition:all .2s}
+.tcard:hover{border-color:var(--purple-mid);box-shadow:0 2px 12px rgba(91,79,212,.08);transform:translateY(-1px)}
+.ticon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:12px}
+.tcard h3{font-size:13.5px;font-weight:600;margin-bottom:5px}
+.tcard p{font-size:12px;color:var(--text3);line-height:1.5;margin-bottom:12px}
+.tprog{height:4px;background:var(--bg4);border-radius:2px;margin-bottom:7px}
+.tpbar{height:100%;border-radius:2px}
+.tmeta{display:flex;justify-content:space-between;font-size:11px;color:var(--text3)}
+
+/* ── CODE BLOCK ── */
+.codeblock{background:#1E1F2E;border:1px solid #2D3050;border-radius:10px;overflow:hidden}
+.codehdr{display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid #2D3050;gap:8px;background:#191A28}
+.cdots{display:flex;gap:5px}
+.dot{width:10px;height:10px;border-radius:50%}
+.dr{background:#FF5F57}.dy{background:#FFBD2E}.dg{background:#28CA41}
+.cfilename{font-size:11.5px;color:#6B7599;font-family:var(--font);margin-left:4px;flex:1}
+.clangbtn{padding:3px 9px;border-radius:5px;font-size:11px;cursor:pointer;border:1px solid #2D3050;background:none;color:#6B7599;transition:all .15s;font-family:var(--font)}
+.clangbtn.active{background:var(--purple);color:#fff;border-color:var(--purple)}
+.codebody{padding:0;font-family:'Fira Code','JetBrains Mono','Courier New',monospace;font-size:12px;line-height:1.75;overflow-x:auto}
+.codeline{display:flex;align-items:flex-start;padding:0 16px;min-height:22px}
+.codeline:hover{background:rgba(255,255,255,.03)}
+.lnum{color:#3D4266;width:28px;min-width:28px;text-align:right;padding-right:16px;user-select:none;font-size:11px;line-height:1.75}
+.lcode{flex:1;color:#CDD6F4;word-break:break-all}
+.kw{color:#CBA6F7}
+.fn{color:#89B4FA}
+.str{color:#A6E3A1}
+.cm{color:#45475A;font-style:italic}
+.num{color:#FAB387}
+.op{color:#89DCEB}
+.cls{color:#F9E2AF}
+.var{color:#CDD6F4}
+.punc{color:#BAC2DE}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;border:none;font-family:var(--font)}
+.btnprim{background:var(--purple);color:#fff}
+.btnprim:hover{background:var(--purple2)}
+.btnsec{background:var(--bg2);color:var(--text);border:1px solid var(--border)}
+.btnsec:hover{border-color:var(--border2);background:var(--bg3)}
+.btnsm{padding:6px 12px;font-size:12px;border-radius:7px}
+.btnicon{width:30px;height:30px;padding:0;border-radius:7px;justify-content:center;align-items:center}
+
+/* ── TABLE ── */
+.dtable{width:100%;border-collapse:collapse}
+.dtable th{text-align:left;padding:9px 13px;font-size:11px;font-weight:600;color:var(--text3);letter-spacing:.4px;text-transform:uppercase;border-bottom:1.5px solid var(--border)}
+.dtable td{padding:11px 13px;font-size:13px;border-bottom:1px solid var(--bg3)}
+.dtable tr:last-child td{border-bottom:none}
+.dtable tbody tr:hover td{background:var(--bg3)}
+
+/* ── PROGRESS BAR ── */
+.pbar{height:5px;background:var(--bg4);border-radius:3px;overflow:hidden}
+.pfill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--purple),var(--teal))}
+
+/* ── TOPIC ITEMS ── */
+.topicitem{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;transition:all .15s;margin-bottom:2px}
+.topicitem:hover{background:var(--bg3)}
+.topicitem.active{background:var(--purple-light);color:var(--purple)}
+.tcheck{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px}
+.tcheck.done{background:var(--green);border-color:var(--green);color:#fff}
+.tcheck.cur{background:var(--purple);border-color:var(--purple);color:#fff}
+
+/* ── QUIZ OPTIONS ── */
+.qopt{display:flex;align-items:center;gap:11px;padding:12px 15px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:all .15s;margin-bottom:8px}
+.qopt:hover{border-color:var(--purple-mid);background:var(--purple-light)}
+.qopt.sel{border-color:var(--purple);background:var(--purple-light)}
+.qopt.correct{border-color:var(--green);background:var(--green-light)}
+.qopt.wrong{border-color:var(--red);background:var(--red-light)}
+.oletter{width:28px;height:28px;min-width:28px;border-radius:7px;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--text2)}
+.qopt.sel .oletter{background:var(--purple);color:#fff}
+.qopt.correct .oletter{background:var(--green);color:#fff}
+.qopt.wrong .oletter{background:var(--red);color:#fff}
+
+/* ── FORUM ── */
+.fpost{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:15px;cursor:pointer;transition:all .15s}
+.fpost:hover{border-color:var(--purple-mid);box-shadow:0 2px 8px rgba(91,79,212,.06)}
+.fpost h4{font-size:13.5px;font-weight:500;margin-bottom:5px;line-height:1.45;color:var(--text)}
+.pmeta{display:flex;align-items:center;gap:10px;font-size:11.5px;color:var(--text3);flex-wrap:wrap}
+.upvbtn{display:flex;align-items:center;gap:4px;color:var(--text3);cursor:pointer;transition:color .15s;font-size:11.5px}
+.upvbtn:hover,.upvbtn.on{color:var(--purple);font-weight:500}
+
+/* ── INFO BOX ── */
+.infobox{background:var(--purple-light);border:1px solid var(--purple-mid);border-radius:8px;padding:13px 15px;border-left:3px solid var(--purple)}
+.infobox p{font-size:13px;color:var(--text2);line-height:1.6}
+
+/* ── INPUTS ── */
+input[type=text],input[type=email],input[type=password],textarea,select{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:13px;color:var(--text);outline:none;transition:border .15s;width:100%;font-family:var(--font)}
+input:focus,textarea:focus,select:focus{border-color:var(--purple);background:var(--bg2);box-shadow:0 0 0 3px rgba(91,79,212,.1)}
+input::placeholder,textarea::placeholder{color:var(--text3)}
+select option{background:var(--bg2)}
+label{font-size:12px;color:var(--text3);display:block;margin-bottom:5px;font-weight:500}
+
+/* ── SECTION TITLE ── */
+.stitle{font-size:14.5px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:7px;color:var(--text)}
+.stitle .sub{font-size:12px;font-weight:400;color:var(--text3);margin-left:2px}
+.divider{height:1px;background:var(--border);margin:18px 0}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* ── TIMER RING ── */
+.tring{position:relative;width:52px;height:52px}
+.tring svg{transform:rotate(-90deg)}
+.tring .tnum{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:13px;font-weight:700;color:var(--purple)}
+
+/* ── DASHBOARD NODE DIAGRAM ── */
+.llnode{background:var(--bg2);border:1.5px solid var(--border);border-radius:7px;padding:8px 13px;text-align:center;min-width:56px}
+.llnode.head{border-color:var(--purple);background:var(--purple-light)}
+.llnode.tail{border-color:var(--teal);background:var(--teal-light)}
+.nlabel{font-size:9.5px;color:var(--text3);margin-bottom:2px;text-transform:uppercase;letter-spacing:.4px}
+.nval{font-size:16px;font-weight:700;color:var(--text)}
+.llnode.head .nval{color:var(--purple)}
+.llnode.tail .nval{color:var(--teal)}
+.nsub{font-size:9.5px;color:var(--text3);margin-top:1px}
+.arrow{color:var(--border2);font-size:18px;display:flex;align-items:center;padding:0 3px}
+
+/* ── OUTPUT BOX ── */
+.outbox{background:#F0FDF4;border:1px solid #BBF7D0;border-radius:9px;padding:12px 15px;display:flex;align-items:center;gap:11px}
+.outbox .icon{width:26px;height:26px;border-radius:6px;background:#DCFCE7;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.outval{font-family:'Fira Code','Courier New',monospace;font-size:13px;color:#16A34A;letter-spacing:.3px}
+
+/* ── ADMIN CHART BARS ── */
+.barwrap{display:flex;align-items:flex-end;gap:7px;height:70px}
+.bar{border-radius:4px 4px 0 0;min-width:22px;transition:height .3s}
+</style>
+
+<h2 class="sr-only">Structify — UI/UX Mockup light theme dengan semua halaman: Dashboard, Cheatsheet, Quiz, Progress, Forum, Profile, Admin</h2>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+
+<div style="display:flex;min-height:100vh">
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">S</div>
+    <div>
+      <div class="logo-text">Structify</div>
+      <div class="logo-sub">DSA Learning Platform</div>
+    </div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">Overview</div>
+    <div class="ni active" onclick="gop('dashboard')"><i class="ti ti-layout-dashboard" aria-hidden="true"></i>Dashboard</div>
+    <div class="nav-section">Belajar</div>
+    <div class="ni" onclick="gop('cheatsheet')"><i class="ti ti-book-2" aria-hidden="true"></i>Cheatsheet</div>
+    <div class="ni" onclick="gop('quiz')"><i class="ti ti-bolt" aria-hidden="true"></i>Quiz<span class="nbadge">3</span></div>
+    <div class="ni" onclick="gop('progress')"><i class="ti ti-chart-line" aria-hidden="true"></i>Progress</div>
+    <div class="nav-section">Komunitas</div>
+    <div class="ni" onclick="gop('forum')"><i class="ti ti-message-circle-2" aria-hidden="true"></i>Forum</div>
+    <div class="nav-section">Akun</div>
+    <div class="ni" onclick="gop('profile')"><i class="ti ti-user-circle" aria-hidden="true"></i>Profile</div>
+    <div class="ni" onclick="gop('admin')"><i class="ti ti-shield-check" aria-hidden="true"></i>Admin Panel</div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="ucard">
+      <div class="uavatar">LJ</div>
+      <div>
+        <div class="uname">Lionel Jevoon</div>
+        <div class="urole">Developer</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+
+<!-- ════════════════ DASHBOARD ════════════════ -->
+<div id="page-dashboard" class="page active">
+  <div class="topbar">
+    <div class="tbtitle">Dashboard</div>
+    <div class="searchbox"><i class="ti ti-search" style="font-size:14px;color:var(--text3)" aria-hidden="true"></i><input type="text" placeholder="Cari topik, soal..."></div>
+    <button class="tbtn"><i class="ti ti-bell" style="font-size:16px" aria-hidden="true"></i></button>
+  </div>
+  <div style="padding:24px">
+    <div style="margin-bottom:22px">
+      <div style="font-size:20px;font-weight:700;margin-bottom:3px">Selamat datang, Lionel 👋</div>
+      <div style="font-size:13px;color:var(--text3)">Kamu sudah belajar <span style="color:var(--purple);font-weight:500">14 topik</span> minggu ini — terus semangat!</div>
+    </div>
+
+    <!-- STATS -->
+    <div class="g4" style="margin-bottom:22px">
+      <div class="statcard">
+        <div class="statlabel"><i class="ti ti-book" aria-hidden="true"></i>Topik Selesai</div>
+        <div class="statval" style="color:var(--purple)">24</div>
+        <div class="statsub">dari 48 total • <b style="color:var(--green)">+3 minggu ini</b></div>
+      </div>
+      <div class="statcard">
+        <div class="statlabel"><i class="ti ti-bolt" aria-hidden="true"></i>Quiz Dimainkan</div>
+        <div class="statval" style="color:var(--teal)">31</div>
+        <div class="statsub">Avg score <b style="color:var(--teal)">78%</b></div>
+      </div>
+      <div class="statcard">
+        <div class="statlabel"><i class="ti ti-trophy" aria-hidden="true"></i>Best Score</div>
+        <div class="statval" style="color:var(--green)">96%</div>
+        <div class="statsub">Binary Search Tree</div>
+      </div>
+      <div class="statcard">
+        <div class="statlabel"><i class="ti ti-messages" aria-hidden="true"></i>Forum Posts</div>
+        <div class="statval" style="color:var(--amber)">7</div>
+        <div class="statsub"><b style="color:var(--amber)">12 upvote</b> total</div>
+      </div>
+    </div>
+
+    <div class="g2" style="margin-bottom:22px">
+      <!-- TRACKS -->
+      <div>
+        <div class="stitle">🗂️ Learning Tracks <span class="sub">Klik untuk mulai belajar</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="tcard" onclick="gop('cheatsheet')">
+            <div class="ticon" style="background:#EEF0FF">🗂️</div>
+            <h3>Struktur Data</h3>
+            <p>Array, Linked List, Stack, Queue, Tree, Graph, Hash Table</p>
+            <div class="tprog"><div class="tpbar" style="width:65%;background:var(--purple)"></div></div>
+            <div class="tmeta"><span>7/11 topik</span><span style="color:var(--purple);font-weight:500">65%</span></div>
+          </div>
+          <div class="tcard" onclick="gop('cheatsheet')">
+            <div class="ticon" style="background:#E6F9F2">⚙️</div>
+            <h3>Algoritma & Prog.</h3>
+            <p>Sorting, Searching, Rekursi, DP, Greedy, Backtracking</p>
+            <div class="tprog"><div class="tpbar" style="width:40%;background:var(--teal)"></div></div>
+            <div class="tmeta"><span>4/10 topik</span><span style="color:var(--teal);font-weight:500">40%</span></div>
+          </div>
+          <div class="tcard" onclick="gop('cheatsheet')">
+            <div class="ticon" style="background:#DCFCE7">🔢</div>
+            <h3>Matematika Diskrit</h3>
+            <p>Logika, Himpunan, Graf, Kombinatorik, Induksi</p>
+            <div class="tprog"><div class="tpbar" style="width:25%;background:var(--green)"></div></div>
+            <div class="tmeta"><span>2/8 topik</span><span style="color:var(--green);font-weight:500">25%</span></div>
+          </div>
+          <div class="tcard" onclick="gop('cheatsheet')">
+            <div class="ticon" style="background:#FEF3C7">🧱</div>
+            <h3>OOP</h3>
+            <p>Class, Encapsulation, Inheritance, Polymorphism, Design Patterns</p>
+            <div class="tprog"><div class="tpbar" style="width:50%;background:var(--amber)"></div></div>
+            <div class="tmeta"><span>4/8 topik</span><span style="color:var(--amber);font-weight:500">50%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <!-- CONTINUE -->
+        <div class="card" style="background:var(--purple-light);border-color:var(--purple-mid)">
+          <div style="font-size:10.5px;color:var(--purple);font-weight:600;letter-spacing:.5px;margin-bottom:5px">⚡ LANJUTKAN BELAJAR</div>
+          <div style="font-size:15px;font-weight:700;margin-bottom:2px;color:var(--text)">AVL Tree</div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:12px">Struktur Data — Topik ke-8 dari 11</div>
+          <div class="pbar" style="margin-bottom:8px"><div class="pfill" style="width:68%"></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:12px;color:var(--text3)">68% selesai</span>
+            <button class="btn btnprim btnsm" onclick="gop('cheatsheet')">Lanjutkan <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+          </div>
+        </div>
+        <!-- RECENT QUIZ -->
+        <div>
+          <div class="stitle" style="font-size:13px">🎯 Quiz Terakhir</div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <div class="cardsm" style="display:flex;align-items:center;gap:11px">
+              <div style="width:34px;height:34px;border-radius:8px;background:var(--green-light);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-circle-check" style="font-size:17px;color:var(--green)" aria-hidden="true"></i></div>
+              <div style="flex:1"><div style="font-size:12.5px;font-weight:500">Binary Search Tree</div><div style="font-size:11px;color:var(--text3)">Struktur Data • 2j lalu</div></div>
+              <div style="font-size:17px;font-weight:700;color:var(--green)">96%</div>
+            </div>
+            <div class="cardsm" style="display:flex;align-items:center;gap:11px">
+              <div style="width:34px;height:34px;border-radius:8px;background:var(--amber-light);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-circle-dashed" style="font-size:17px;color:var(--amber)" aria-hidden="true"></i></div>
+              <div style="flex:1"><div style="font-size:12.5px;font-weight:500">Quick Sort</div><div style="font-size:11px;color:var(--text3)">Algoritma • 1 hari lalu</div></div>
+              <div style="font-size:17px;font-weight:700;color:var(--amber)">72%</div>
+            </div>
+            <div class="cardsm" style="display:flex;align-items:center;gap:11px">
+              <div style="width:34px;height:34px;border-radius:8px;background:var(--red-light);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-circle-x" style="font-size:17px;color:var(--red)" aria-hidden="true"></i></div>
+              <div style="flex:1"><div style="font-size:12.5px;font-weight:500">Dynamic Programming</div><div style="font-size:11px;color:var(--text3)">Algoritma • 2 hari lalu</div></div>
+              <div style="font-size:17px;font-weight:700;color:var(--red)">44%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORUM PREVIEW -->
+    <div class="stitle">💬 Diskusi Terbaru</div>
+    <div class="g3">
+      <div class="fpost" onclick="gop('forum')">
+        <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap"><span class="badge bp">Linked List</span><span class="badge bgr">3 balasan</span></div>
+        <h4>Perbedaan Circular vs Double Linked List — kapan dipakai?</h4>
+        <p style="font-size:12px;color:var(--text3);margin:5px 0 10px;line-height:1.5">Saya masih bingung use case masing-masing, bisa tolong jelasin?</p>
+        <div class="pmeta"><span>@rizky_dev</span><div class="upvbtn on"><i class="ti ti-arrow-up" aria-hidden="true"></i>12</div><span>2j lalu</span></div>
+      </div>
+      <div class="fpost" onclick="gop('forum')">
+        <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap"><span class="badge bt">Sorting</span><span class="badge bg">Solved</span></div>
+        <h4>Kenapa Quick Sort lebih cepat dari Merge Sort dalam praktik?</h4>
+        <p style="font-size:12px;color:var(--text3);margin:5px 0 10px;line-height:1.5">Berkaitan dengan cache locality dan constant factor...</p>
+        <div class="pmeta"><span>@aditya_cs</span><div class="upvbtn"><i class="ti ti-arrow-up" aria-hidden="true"></i>28</div><span>5j lalu</span></div>
+      </div>
+      <div class="fpost" onclick="gop('forum')">
+        <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap"><span class="badge ba">DP</span></div>
+        <h4>Cara ngerti memoization vs tabulation di Dynamic Programming</h4>
+        <p style="font-size:12px;color:var(--text3);margin:5px 0 10px;line-height:1.5">Ada yang bisa rekomendasiin cara belajar DP yang efektif?</p>
+        <div class="pmeta"><span>@nadhilah_m</span><div class="upvbtn"><i class="ti ti-arrow-up" aria-hidden="true"></i>9</div><span>1h lalu</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ CHEATSHEET ════════════════ -->
+<div id="page-cheatsheet" class="page">
+  <div class="topbar">
+    <button class="tbtn" onclick="gop('dashboard')" style="margin-right:4px"><i class="ti ti-chevron-left" style="font-size:16px" aria-hidden="true"></i></button>
+    <span style="font-size:12.5px;color:var(--text3)">Struktur Data</span>
+    <span style="color:var(--border2);margin:0 5px">/</span>
+    <span style="font-size:13.5px;font-weight:500">Linked List</span>
+    <div style="flex:1"></div>
+    <button class="btn btnsec btnsm" id="btn-py" onclick="setLang('py')"><i class="ti ti-brand-python" aria-hidden="true"></i>Python</button>
+    <button class="btn btnprim btnsm" id="btn-cpp" onclick="setLang('cpp')"><i class="ti ti-bolt" aria-hidden="true"></i>C++</button>
+  </div>
+  <div style="padding:20px;display:grid;grid-template-columns:210px 1fr;gap:18px">
+
+    <!-- TOPIC SIDEBAR -->
+    <div class="card" style="padding:14px;height:fit-content">
+      <div style="font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.6px;margin-bottom:10px;text-transform:uppercase">Struktur Data</div>
+      <div class="topicitem"><div class="tcheck done"><i class="ti ti-check" style="font-size:9px" aria-hidden="true"></i></div><span style="font-size:12.5px">Array</span></div>
+      <div class="topicitem active"><div class="tcheck cur"><i class="ti ti-check" style="font-size:9px" aria-hidden="true"></i></div><span style="font-size:12.5px;font-weight:500">Linked List</span><span style="margin-left:auto;font-size:10px;color:var(--purple);font-weight:500">Aktif</span></div>
+      <div class="topicitem"><div class="tcheck done"><i class="ti ti-check" style="font-size:9px" aria-hidden="true"></i></div><span style="font-size:12.5px">Stack</span></div>
+      <div class="topicitem"><div class="tcheck"></div><span style="font-size:12.5px;color:var(--text2)">Queue</span></div>
+      <div class="topicitem"><div class="tcheck"></div><span style="font-size:12.5px;color:var(--text2)">Tree</span></div>
+      <div class="topicitem"><div class="tcheck"></div><span style="font-size:12.5px;color:var(--text2)">Binary Search Tree</span></div>
+      <div class="topicitem"><div class="tcheck"></div><span style="font-size:12.5px;color:var(--text2)">AVL Tree</span></div>
+      <div class="topicitem"><div class="tcheck"></div><span style="font-size:12.5px;color:var(--text2)">Graph</span></div>
+      <div class="topicitem"><div class="tcheck"></div><span style="font-size:12.5px;color:var(--text2)">Hash Table</span></div>
+      <div class="topicitem"><div class="tcheck"></div><span style="font-size:12.5px;color:var(--text2)">Heap</span></div>
+      <div class="divider"></div>
+      <button class="btn btnprim" style="width:100%;justify-content:center;font-size:12px" onclick="gop('quiz')"><i class="ti ti-bolt" aria-hidden="true"></i>Mulai Quiz</button>
+    </div>
+
+    <!-- CONTENT -->
+    <div style="display:flex;flex-direction:column;gap:14px">
+
+      <!-- HEADER CARD -->
+      <div class="card">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:12px">
+          <div>
+            <div style="display:flex;gap:6px;margin-bottom:9px"><span class="badge bp">Struktur Data</span><span class="badge bt">Fundamental</span></div>
+            <h1 style="font-size:22px;font-weight:700;margin-bottom:5px;color:var(--text)">Linked List</h1>
+            <p style="font-size:13px;color:var(--text3)">Struktur data linear berupa node-node yang saling terhubung melalui pointer</p>
+          </div>
+          <div style="flex-shrink:0;text-align:right">
+            <div style="font-size:10.5px;color:var(--text3);margin-bottom:6px;font-weight:500">Kompleksitas</div>
+            <div style="display:flex;gap:8px">
+              <div style="padding:8px 14px;background:var(--green-light);border-radius:8px;text-align:center">
+                <div style="font-size:17px;font-weight:700;color:var(--green)">O(1)</div>
+                <div style="font-size:10px;color:var(--green);margin-top:1px">Insert Head</div>
+              </div>
+              <div style="padding:8px 14px;background:var(--amber-light);border-radius:8px;text-align:center">
+                <div style="font-size:17px;font-weight:700;color:var(--amber)">O(n)</div>
+                <div style="font-size:10px;color:var(--amber);margin-top:1px">Search</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="infobox" style="margin-bottom:14px">
+          <p>📌 Linked List adalah koleksi node di mana setiap node berisi <strong style="color:var(--purple)">data</strong> dan <strong style="color:var(--teal)">pointer ke node berikutnya</strong>. Berbeda dengan array, linked list tidak membutuhkan memori yang kontinu.</p>
+        </div>
+
+        <!-- VISUAL DIAGRAM -->
+        <div style="background:var(--bg3);border-radius:8px;padding:14px 18px;display:flex;align-items:center;gap:2px;overflow-x:auto">
+          <div class="llnode head"><div class="nlabel">HEAD</div><div class="nval">10</div><div class="nsub">→ next</div></div>
+          <div class="arrow">→</div>
+          <div class="llnode"><div class="nlabel">NODE</div><div class="nval">20</div><div class="nsub">→ next</div></div>
+          <div class="arrow">→</div>
+          <div class="llnode"><div class="nlabel">NODE</div><div class="nval">30</div><div class="nsub">→ next</div></div>
+          <div class="arrow">→</div>
+          <div class="llnode tail"><div class="nlabel">TAIL</div><div class="nval">40</div><div class="nsub">NULL</div></div>
+        </div>
+      </div>
+
+      <!-- CODE BLOCK -->
+      <div class="codeblock">
+        <div class="codehdr">
+          <div class="cdots"><div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div></div>
+          <span class="cfilename" id="cfilename">linked_list.py</span>
+          <button class="clangbtn active" id="clb-py" onclick="setLang('py')">Python</button>
+          <button class="clangbtn" id="clb-cpp" onclick="setLang('cpp')">C++</button>
+        </div>
+        <div class="codebody">
+          <!-- PYTHON -->
+          <div id="cpython">
+            <div class="codeline"><span class="lnum">1</span><span class="lcode"><span class="cm"># Node class untuk Linked List</span></span></div>
+            <div class="codeline"><span class="lnum">2</span><span class="lcode"><span class="kw">class</span> <span class="cls">Node</span><span class="punc">:</span></span></div>
+            <div class="codeline"><span class="lnum">3</span><span class="lcode">    <span class="kw">def</span> <span class="fn">__init__</span><span class="punc">(</span><span class="kw">self</span><span class="punc">,</span> data<span class="punc">):</span></span></div>
+            <div class="codeline"><span class="lnum">4</span><span class="lcode">        <span class="kw">self</span><span class="punc">.</span>data <span class="op">=</span> data</span></div>
+            <div class="codeline"><span class="lnum">5</span><span class="lcode">        <span class="kw">self</span><span class="punc">.</span>next <span class="op">=</span> <span class="kw">None</span></span></div>
+            <div class="codeline"><span class="lnum">6</span><span class="lcode"></span></div>
+            <div class="codeline"><span class="lnum">7</span><span class="lcode"><span class="kw">class</span> <span class="cls">LinkedList</span><span class="punc">:</span></span></div>
+            <div class="codeline"><span class="lnum">8</span><span class="lcode">    <span class="kw">def</span> <span class="fn">__init__</span><span class="punc">(</span><span class="kw">self</span><span class="punc">):</span></span></div>
+            <div class="codeline"><span class="lnum">9</span><span class="lcode">        <span class="kw">self</span><span class="punc">.</span>head <span class="op">=</span> <span class="kw">None</span></span></div>
+            <div class="codeline"><span class="lnum">10</span><span class="lcode"></span></div>
+            <div class="codeline"><span class="lnum">11</span><span class="lcode">    <span class="kw">def</span> <span class="fn">insert_head</span><span class="punc">(</span><span class="kw">self</span><span class="punc">,</span> data<span class="punc">):</span>      <span class="cm"># O(1)</span></span></div>
+            <div class="codeline"><span class="lnum">12</span><span class="lcode">        new_node <span class="op">=</span> <span class="cls">Node</span><span class="punc">(</span>data<span class="punc">)</span></span></div>
+            <div class="codeline"><span class="lnum">13</span><span class="lcode">        new_node<span class="punc">.</span>next <span class="op">=</span> <span class="kw">self</span><span class="punc">.</span>head</span></div>
+            <div class="codeline"><span class="lnum">14</span><span class="lcode">        <span class="kw">self</span><span class="punc">.</span>head <span class="op">=</span> new_node</span></div>
+            <div class="codeline"><span class="lnum">15</span><span class="lcode"></span></div>
+            <div class="codeline"><span class="lnum">16</span><span class="lcode">    <span class="kw">def</span> <span class="fn">insert_tail</span><span class="punc">(</span><span class="kw">self</span><span class="punc">,</span> data<span class="punc">):</span>      <span class="cm"># O(n)</span></span></div>
+            <div class="codeline"><span class="lnum">17</span><span class="lcode">        new_node <span class="op">=</span> <span class="cls">Node</span><span class="punc">(</span>data<span class="punc">)</span></span></div>
+            <div class="codeline"><span class="lnum">18</span><span class="lcode">        <span class="kw">if not self</span><span class="punc">.</span>head<span class="punc">:</span></span></div>
+            <div class="codeline"><span class="lnum">19</span><span class="lcode">            <span class="kw">self</span><span class="punc">.</span>head <span class="op">=</span> new_node<span class="punc">;</span> <span class="kw">return</span></span></div>
+            <div class="codeline"><span class="lnum">20</span><span class="lcode">        curr <span class="op">=</span> <span class="kw">self</span><span class="punc">.</span>head</span></div>
+            <div class="codeline"><span class="lnum">21</span><span class="lcode">        <span class="kw">while</span> curr<span class="punc">.</span>next<span class="punc">:</span></span></div>
+            <div class="codeline"><span class="lnum">22</span><span class="lcode">            curr <span class="op">=</span> curr<span class="punc">.</span>next</span></div>
+            <div class="codeline"><span class="lnum">23</span><span class="lcode">        curr<span class="punc">.</span>next <span class="op">=</span> new_node</span></div>
+            <div class="codeline"><span class="lnum">24</span><span class="lcode"></span></div>
+            <div class="codeline"><span class="lnum">25</span><span class="lcode">    <span class="kw">def</span> <span class="fn">display</span><span class="punc">(</span><span class="kw">self</span><span class="punc">):</span></span></div>
+            <div class="codeline"><span class="lnum">26</span><span class="lcode">        curr<span class="punc">,</span> res <span class="op">=</span> <span class="kw">self</span><span class="punc">.</span>head<span class="punc">,</span> <span class="punc">[]</span></span></div>
+            <div class="codeline"><span class="lnum">27</span><span class="lcode">        <span class="kw">while</span> curr<span class="punc">:</span></span></div>
+            <div class="codeline"><span class="lnum">28</span><span class="lcode">            res<span class="punc">.</span><span class="fn">append</span><span class="punc">(</span><span class="fn">str</span><span class="punc">(</span>curr<span class="punc">.</span>data<span class="punc">))</span><span class="punc">;</span> curr <span class="op">=</span> curr<span class="punc">.</span>next</span></div>
+            <div class="codeline"><span class="lnum">29</span><span class="lcode">        <span class="fn">print</span><span class="punc">(</span><span class="str">" → "</span><span class="punc">.</span><span class="fn">join</span><span class="punc">(</span>res<span class="punc">) +</span> <span class="str">" → None"</span><span class="punc">)</span></span></div>
+            <div class="codeline"><span class="lnum">30</span><span class="lcode"></span></div>
+            <div class="codeline"><span class="lnum">31</span><span class="lcode">ll <span class="op">=</span> <span class="cls">LinkedList</span><span class="punc">()</span></span></div>
+            <div class="codeline"><span class="lnum">32</span><span class="lcode">ll<span class="punc">.</span><span class="fn">insert_tail</span><span class="punc">(</span><span class="num">10</span><span class="punc">)</span><span class="punc">;</span> ll<span class="punc">.</span><span class="fn">insert_tail</span><span class="punc">(</span><span class="num">20</span><span class="punc">)</span><span class="punc">;</span> ll<span class="punc">.</span><span class="fn">insert_tail</span><span class="punc">(</span><span class="num">30</span><span class="punc">)</span></span></div>
+            <div class="codeline"><span class="lnum">33</span><span class="lcode">ll<span class="punc">.</span><span class="fn">display</span><span class="punc">()</span>    <span class="cm"># 10 → 20 → 30 → None</span></span></div>
+          </div>
+          <!-- C++ -->
+          <div id="ccpp" style="display:none">
+            <div class="codeline"><span class="lnum">1</span><span class="lcode"><span class="cm">// Node struct untuk Linked List</span></span></div>
+            <div class="codeline"><span class="lnum">2</span><span class="lcode"><span class="kw">struct</span> <span class="cls">Node</span> <span class="punc">{</span></span></div>
+            <div class="codeline"><span class="lnum">3</span><span class="lcode">    <span class="kw">int</span> data<span class="punc">;</span></span></div>
+            <div class="codeline"><span class="lnum">4</span><span class="lcode">    <span class="cls">Node</span><span class="op">*</span> next<span class="punc">;</span></span></div>
+            <div class="codeline"><span class="lnum">5</span><span class="lcode">    <span class="cls">Node</span><span class="punc">(</span><span class="kw">int</span> d<span class="punc">)</span> <span class="punc">:</span> data<span class="punc">(</span>d<span class="punc">),</span> next<span class="punc">(</span><span class="kw">nullptr</span><span class="punc">)</span> <span class="punc">{}</span></span></div>
+            <div class="codeline"><span class="lnum">6</span><span class="lcode"><span class="punc">};</span></span></div>
+            <div class="codeline"><span class="lnum">7</span><span class="lcode"></span></div>
+            <div class="codeline"><span class="lnum">8</span><span class="lcode"><span class="kw">class</span> <span class="cls">LinkedList</span> <span class="punc">{</span></span></div>
+            <div class="codeline"><span class="lnum">9</span><span class="lcode">    <span class="cls">Node</span><span class="op">*</span> head<span class="punc">;</span></span></div>
+            <div class="codeline"><span class="lnum">10</span><span class="lcode"><span class="kw">public</span><span class="punc">:</span></span></div>
+            <div class="codeline"><span class="lnum">11</span><span class="lcode">    <span class="cls">LinkedList</span><span class="punc">()</span> <span class="punc">:</span> head<span class="punc">(</span><span class="kw">nullptr</span><span class="punc">)</span> <span class="punc">{}</span></span></div>
+            <div class="codeline"><span class="lnum">12</span><span class="lcode"></span></div>
+            <div class="codeline"><span class="lnum">13</span><span class="lcode">    <span class="kw">void</span> <span class="fn">insertHead</span><span class="punc">(</span><span class="kw">int</span> data<span class="punc">)</span> <span class="punc">{</span>     <span class="cm">// O(1)</span></span></div>
+            <div class="codeline"><span class="lnum">14</span><span class="lcode">        <span class="cls">Node</span><span class="op">*</span> node <span class="op">=</span> <span class="kw">new</span> <span class="cls">Node</span><span class="punc">(</span>data<span class="punc">);</span></span></div>
+            <div class="codeline"><span class="lnum">15</span><span class="lcode">        node<span class="op">-></span>next <span class="op">=</span> head<span class="punc">;</span> head <span class="op">=</span> node<span class="punc">;</span></span></div>
+            <div class="codeline"><span class="lnum">16</span><span class="lcode">    <span class="punc">}</span></span></div>
+            <div class="codeline"><span class="lnum">17</span><span class="lcode"></span></div>
+            <div class="codeline"><span class="lnum">18</span><span class="lcode">    <span class="kw">void</span> <span class="fn">insertTail</span><span class="punc">(</span><span class="kw">int</span> data<span class="punc">)</span> <span class="punc">{</span>     <span class="cm">// O(n)</span></span></div>
+            <div class="codeline"><span class="lnum">19</span><span class="lcode">        <span class="cls">Node</span><span class="op">*</span> node <span class="op">=</span> <span class="kw">new</span> <span class="cls">Node</span><span class="punc">(</span>data<span class="punc">);</span></span></div>
+            <div class="codeline"><span class="lnum">20</span><span class="lcode">        <span class="kw">if</span> <span class="punc">(!</span>head<span class="punc">)</span> <span class="punc">{</span> head <span class="op">=</span> node<span class="punc">;</span> <span class="kw">return</span><span class="punc">;</span> <span class="punc">}</span></span></div>
+            <div class="codeline"><span class="lnum">21</span><span class="lcode">        <span class="cls">Node</span><span class="op">*</span> curr <span class="op">=</span> head<span class="punc">;</span></span></div>
+            <div class="codeline"><span class="lnum">22</span><span class="lcode">        <span class="kw">while</span> <span class="punc">(</span>curr<span class="op">-></span>next<span class="punc">)</span> curr <span class="op">=</span> curr<span class="op">-></span>next<span class="punc">;</span></span></div>
+            <div class="codeline"><span class="lnum">23</span><span class="lcode">        curr<span class="op">-></span>next <span class="op">=</span> node<span class="punc">;</span></span></div>
+            <div class="codeline"><span class="lnum">24</span><span class="lcode">    <span class="punc">}</span></span></div>
+            <div class="codeline"><span class="lnum">25</span><span class="lcode"></span></div>
+            <div class="codeline"><span class="lnum">26</span><span class="lcode">    <span class="kw">void</span> <span class="fn">display</span><span class="punc">()</span> <span class="punc">{</span></span></div>
+            <div class="codeline"><span class="lnum">27</span><span class="lcode">        <span class="cls">Node</span><span class="op">*</span> curr <span class="op">=</span> head<span class="punc">;</span></span></div>
+            <div class="codeline"><span class="lnum">28</span><span class="lcode">        <span class="kw">while</span> <span class="punc">(</span>curr<span class="punc">)</span> <span class="punc">{</span></span></div>
+            <div class="codeline"><span class="lnum">29</span><span class="lcode">            cout <span class="op"><<</span> curr<span class="op">-></span>data <span class="op"><<</span> <span class="str">" → "</span><span class="punc">;</span> curr <span class="op">=</span> curr<span class="op">-></span>next<span class="punc">;</span></span></div>
+            <div class="codeline"><span class="lnum">30</span><span class="lcode">        <span class="punc">}</span></span></div>
+            <div class="codeline"><span class="lnum">31</span><span class="lcode">        cout <span class="op"><<</span> <span class="str">"nullptr"</span> <span class="op"><<</span> endl<span class="punc">;</span></span></div>
+            <div class="codeline"><span class="lnum">32</span><span class="lcode">    <span class="punc">}</span></span></div>
+            <div class="codeline"><span class="lnum">33</span><span class="lcode"><span class="punc">};</span> <span class="cm">// Output: 10 → 20 → 30 → nullptr</span></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OUTPUT -->
+      <div class="outbox">
+        <div class="icon">▶</div>
+        <div><div style="font-size:10.5px;color:var(--text3);margin-bottom:2px;font-weight:500">Output</div><div class="outval">10 → 20 → 30 → None</div></div>
+      </div>
+
+      <!-- COMPLEXITY TABLE -->
+      <div class="card">
+        <div class="stitle" style="font-size:13.5px">📊 Tabel Kompleksitas</div>
+        <table class="dtable">
+          <thead><tr><th>Operasi</th><th>Waktu</th><th>Keterangan</th></tr></thead>
+          <tbody>
+            <tr><td>Insert Head</td><td><span class="badge bg">O(1)</span></td><td style="color:var(--text3);font-size:12px">Update pointer head saja — konstan</td></tr>
+            <tr><td>Insert Tail</td><td><span class="badge ba">O(n)</span></td><td style="color:var(--text3);font-size:12px">Traverse ke akhir list</td></tr>
+            <tr><td>Delete Head</td><td><span class="badge bg">O(1)</span></td><td style="color:var(--text3);font-size:12px">Update pointer head</td></tr>
+            <tr><td>Search</td><td><span class="badge ba">O(n)</span></td><td style="color:var(--text3);font-size:12px">Traverse satu per satu</td></tr>
+            <tr><td>Space</td><td><span class="badge bp">O(n)</span></td><td style="color:var(--text3);font-size:12px">Tiap node butuh pointer extra</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ QUIZ ════════════════ -->
+<div id="page-quiz" class="page">
+  <div class="topbar">
+    <button class="tbtn" onclick="gop('dashboard')"><i class="ti ti-chevron-left" style="font-size:16px" aria-hidden="true"></i></button>
+    <div class="tbtitle" style="margin-left:8px">Quiz — Linked List</div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <span style="font-size:13px;color:var(--text3)">Soal <strong style="color:var(--text)">2</strong>/5</span>
+      <div class="tring">
+        <svg width="52" height="52" viewBox="0 0 52 52">
+          <circle cx="26" cy="26" r="20" stroke-width="3.5" stroke="var(--bg4)" fill="none"/>
+          <circle cx="26" cy="26" r="20" stroke-width="3.5" stroke="var(--purple)" fill="none" stroke-dasharray="126" id="tcirc" stroke-dashoffset="38" style="transform:rotate(-90deg);transform-origin:26px 26px;transition:stroke-dashoffset .5s"/>
+        </svg>
+        <div class="tnum" id="tnum">18s</div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:28px;max-width:680px;margin:0 auto">
+    <div style="display:flex;gap:5px;margin-bottom:26px">
+      <div style="flex:1;height:4px;border-radius:2px;background:var(--green)"></div>
+      <div style="flex:1;height:4px;border-radius:2px;background:var(--purple)"></div>
+      <div style="flex:1;height:4px;border-radius:2px;background:var(--bg4)"></div>
+      <div style="flex:1;height:4px;border-radius:2px;background:var(--bg4)"></div>
+      <div style="flex:1;height:4px;border-radius:2px;background:var(--bg4)"></div>
+    </div>
+    <div class="card" style="margin-bottom:18px">
+      <div style="font-size:11.5px;color:var(--text3);margin-bottom:9px;font-weight:500">Soal 2 dari 5 · Linked List</div>
+      <div style="font-size:15.5px;font-weight:500;line-height:1.6;margin-bottom:14px;color:var(--text)">Apa time complexity dari operasi <code style="background:var(--purple-light);color:var(--purple);padding:2px 8px;border-radius:5px;font-size:14px;font-family:monospace">insertHead()</code> pada Singly Linked List?</div>
+      <div style="background:var(--bg3);border-radius:7px;padding:11px 14px;border-left:3px solid var(--purple)">
+        <div style="font-size:10.5px;color:var(--text3);margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:.4px">Petunjuk</div>
+        <div style="font-size:12.5px;color:var(--text2)">Perhatikan: apakah operasi ini perlu traverse seluruh list?</div>
+      </div>
+    </div>
+    <div id="qopts" style="margin-bottom:20px">
+      <div class="qopt" onclick="selopt(this,'A')"><div class="oletter" id="oA">A</div><span style="font-size:13px">O(n) — harus traverse sampai akhir list</span></div>
+      <div class="qopt sel" onclick="selopt(this,'B')"><div class="oletter" id="oB">B</div><span style="font-size:13px">O(1) — hanya update pointer head saja</span></div>
+      <div class="qopt" onclick="selopt(this,'C')"><div class="oletter" id="oC">C</div><span style="font-size:13px">O(log n) — menggunakan binary search</span></div>
+      <div class="qopt" onclick="selopt(this,'D')"><div class="oletter" id="oD">D</div><span style="font-size:13px">O(n²) — nested loop untuk posisi</span></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <button class="btn btnsec" onclick="gop('dashboard')"><i class="ti ti-x" aria-hidden="true"></i>Keluar Quiz</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btnsec">Lewati</button>
+        <button class="btn btnprim" onclick="showQres()">Konfirmasi <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div id="qresult" style="display:none;margin-top:18px">
+      <div class="card" style="background:var(--green-light);border-color:#BBF7D0">
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px">
+          <div style="width:26px;height:26px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-check" style="font-size:14px;color:#fff" aria-hidden="true"></i></div>
+          <div style="font-weight:600;color:var(--green);font-size:14px">Jawaban Benar!</div>
+        </div>
+        <p style="font-size:13px;color:var(--text2);line-height:1.6">InsertHead hanya memerlukan dua operasi pointer: set <code style="background:white;padding:1px 6px;border-radius:4px;font-size:12px">new_node.next = head</code>, lalu <code style="background:white;padding:1px 6px;border-radius:4px;font-size:12px">head = new_node</code>. Tidak ada traversal — kompleksitasnya <strong style="color:var(--green)">O(1)</strong> konstan.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ PROGRESS ════════════════ -->
+<div id="page-progress" class="page">
+  <div class="topbar"><div class="tbtitle">Progress Tracker</div></div>
+  <div style="padding:24px">
+    <div style="margin-bottom:20px">
+      <div style="font-size:18px;font-weight:700;margin-bottom:3px">Perjalanan Belajarmu</div>
+      <div style="font-size:13px;color:var(--text3)">17 dari 48 topik selesai</div>
+    </div>
+    <div class="pbar" style="height:9px;margin-bottom:24px;border-radius:5px"><div class="pfill" style="width:35%;height:9px;border-radius:5px"></div></div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div style="font-size:14px;font-weight:600">🗂️ Struktur Data</div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-size:12px;color:var(--text3)">7/11</span><span class="badge bp">65%</span></div>
+        </div>
+        <div class="pbar" style="margin-bottom:11px"><div class="pfill" style="width:65%;background:var(--purple)"></div></div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:7px">
+          <div style="padding:7px;background:var(--green-light);border:1px solid #BBF7D0;border-radius:7px;font-size:11.5px;text-align:center;color:var(--green);font-weight:500">✓ Array</div>
+          <div style="padding:7px;background:var(--green-light);border:1px solid #BBF7D0;border-radius:7px;font-size:11.5px;text-align:center;color:var(--green);font-weight:500">✓ Linked List</div>
+          <div style="padding:7px;background:var(--green-light);border:1px solid #BBF7D0;border-radius:7px;font-size:11.5px;text-align:center;color:var(--green);font-weight:500">✓ Stack</div>
+          <div style="padding:7px;background:var(--purple-light);border:1px solid var(--purple-mid);border-radius:7px;font-size:11.5px;text-align:center;color:var(--purple);font-weight:500">▶ Queue</div>
+          <div style="padding:7px;background:var(--bg3);border:1px solid var(--border);border-radius:7px;font-size:11.5px;text-align:center;color:var(--text3)">Tree</div>
+          <div style="padding:7px;background:var(--bg3);border:1px solid var(--border);border-radius:7px;font-size:11.5px;text-align:center;color:var(--text3)">BST</div>
+          <div style="padding:7px;background:var(--bg3);border:1px solid var(--border);border-radius:7px;font-size:11.5px;text-align:center;color:var(--text3)">AVL Tree</div>
+          <div style="padding:7px;background:var(--bg3);border:1px solid var(--border);border-radius:7px;font-size:11.5px;text-align:center;color:var(--text3)">Graph</div>
+          <div style="padding:7px;background:var(--bg3);border:1px solid var(--border);border-radius:7px;font-size:11.5px;text-align:center;color:var(--text3)">Hash Table</div>
+          <div style="padding:7px;background:var(--bg3);border:1px solid var(--border);border-radius:7px;font-size:11.5px;text-align:center;color:var(--text3)">Heap</div>
+        </div>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div style="font-size:14px;font-weight:600">⚙️ Algoritma & Pemrograman</div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-size:12px;color:var(--text3)">4/10</span><span class="badge bt">40%</span></div>
+        </div>
+        <div class="pbar" style="margin-bottom:11px"><div class="pfill" style="width:40%;background:var(--teal)"></div></div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:7px">
+          <div style="padding:7px;background:var(--green-light);border:1px solid #BBF7D0;border-radius:7px;font-size:11.5px;text-align:center;color:var(--green);font-weight:500">✓ Bubble Sort</div>
+          <div style="padding:7px;background:var(--green-light);border:1px solid #BBF7D0;border-radius:7px;font-size:11.5px;text-align:center;color:var(--green);font-weight:500">✓ Merge Sort</div>
+          <div style="padding:7px;background:var(--green-light);border:1px solid #BBF7D0;border-radius:7px;font-size:11.5px;text-align:center;color:var(--green);font-weight:500">✓ Binary Search</div>
+          <div style="padding:7px;background:var(--green-light);border:1px solid #BBF7D0;border-radius:7px;font-size:11.5px;text-align:center;color:var(--green);font-weight:500">✓ Rekursi</div>
+          <div style="padding:7px;background:var(--bg3);border:1px solid var(--border);border-radius:7px;font-size:11.5px;text-align:center;color:var(--text3)">Quick Sort</div>
+          <div style="padding:7px;background:var(--bg3);border:1px solid var(--border);border-radius:7px;font-size:11.5px;text-align:center;color:var(--text3)">Heap Sort</div>
+          <div style="padding:7px;background:var(--bg3);border:1px solid var(--border);border-radius:7px;font-size:11.5px;text-align:center;color:var(--text3)">Dynamic Prog.</div>
+          <div style="padding:7px;background:var(--bg3);border:1px solid var(--border);border-radius:7px;font-size:11.5px;text-align:center;color:var(--text3)">Greedy</div>
+        </div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div style="font-size:14px;font-weight:600">🔢 Matematika Diskrit</div><span class="badge bg">25%</span></div>
+          <div class="pbar" style="margin-bottom:8px"><div class="pfill" style="width:25%;background:var(--green)"></div></div>
+          <div style="font-size:12px;color:var(--text3)">2 dari 8 topik selesai</div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div style="font-size:14px;font-weight:600">🧱 OOP</div><span class="badge ba">50%</span></div>
+          <div class="pbar" style="margin-bottom:8px"><div class="pfill" style="width:50%;background:var(--amber)"></div></div>
+          <div style="font-size:12px;color:var(--text3)">4 dari 8 topik selesai</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ FORUM ════════════════ -->
+<div id="page-forum" class="page">
+  <div class="topbar">
+    <div class="tbtitle">Community Forum</div>
+    <div class="searchbox"><i class="ti ti-search" style="font-size:14px;color:var(--text3)" aria-hidden="true"></i><input type="text" placeholder="Cari diskusi..."></div>
+    <button class="btn btnprim btnsm" onclick="showFnew()"><i class="ti ti-plus" aria-hidden="true"></i>Post Baru</button>
+  </div>
+  <div style="padding:24px;display:grid;grid-template-columns:1fr 260px;gap:18px">
+    <div>
+      <div style="display:flex;gap:7px;margin-bottom:18px;flex-wrap:wrap;align-items:center">
+        <button class="btn btnprim btnsm">Semua</button>
+        <button class="btn btnsec btnsm">Terbaru</button>
+        <button class="btn btnsec btnsm">Terpopuler</button>
+        <button class="btn btnsec btnsm">Belum Dijawab</button>
+        <div style="margin-left:auto;display:flex;gap:5px;flex-wrap:wrap">
+          <span class="badge bp" style="cursor:pointer;padding:4px 11px">Linked List</span>
+          <span class="badge bt" style="cursor:pointer;padding:4px 11px">Sorting</span>
+          <span class="badge ba" style="cursor:pointer;padding:4px 11px">DP</span>
+          <span class="badge bgr" style="cursor:pointer;padding:4px 11px">OOP</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:9px">
+        <div class="fpost">
+          <div style="display:flex;align-items:flex-start;gap:11px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;min-width:30px">
+              <button class="upvbtn on" style="flex-direction:column;font-size:17px;border:none;background:none;padding:0"><i class="ti ti-arrow-up" aria-hidden="true"></i></button>
+              <span style="font-size:13px;font-weight:600;color:var(--purple)">28</span>
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;gap:6px;margin-bottom:7px;flex-wrap:wrap"><span class="badge bt">Sorting</span><span class="badge bg">Terjawab</span></div>
+              <h4 style="font-size:14px">Kenapa Quick Sort worst case O(n²) tapi lebih cepat dari Merge Sort dalam praktik?</h4>
+              <p style="font-size:12.5px;color:var(--text3);margin:5px 0 10px;line-height:1.5">Saya membaca bahwa Quick Sort average O(n log n) tapi worst case O(n²). Kenapa benchmark nyata Quick Sort sering lebih cepat?</p>
+              <div class="pmeta">
+                <div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--teal));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#fff">AK</div>
+                <span>aditya_k</span><span>·</span><span>5 jam lalu</span><span>·</span><span>6 balasan</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="fpost">
+          <div style="display:flex;align-items:flex-start;gap:11px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;min-width:30px">
+              <button class="upvbtn" style="flex-direction:column;font-size:17px;border:none;background:none;padding:0"><i class="ti ti-arrow-up" aria-hidden="true"></i></button>
+              <span style="font-size:13px;font-weight:600;color:var(--text3)">12</span>
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;gap:6px;margin-bottom:7px;flex-wrap:wrap"><span class="badge bp">Linked List</span></div>
+              <h4 style="font-size:14px">Perbedaan Circular vs Double Linked List — kapan sebaiknya dipakai?</h4>
+              <p style="font-size:12.5px;color:var(--text3);margin:5px 0 10px;line-height:1.5">Masih bingung use case masing-masing, tolong jelasin dengan contoh nyata?</p>
+              <div class="pmeta">
+                <div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--red));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#fff">RD</div>
+                <span>rizky_d</span><span>·</span><span>2 jam lalu</span><span>·</span><span>3 balasan</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="fpost">
+          <div style="display:flex;align-items:flex-start;gap:11px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;min-width:30px">
+              <button class="upvbtn" style="flex-direction:column;font-size:17px;border:none;background:none;padding:0"><i class="ti ti-arrow-up" aria-hidden="true"></i></button>
+              <span style="font-size:13px;font-weight:600;color:var(--text3)">9</span>
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;gap:6px;margin-bottom:7px;flex-wrap:wrap"><span class="badge ba">DP</span></div>
+              <h4 style="font-size:14px">Cara ngerti memoization vs tabulation di Dynamic Programming</h4>
+              <p style="font-size:12.5px;color:var(--text3);margin:5px 0 10px;line-height:1.5">Ada yang bisa rekomendasiin cara belajar DP yang efektif? Udah nyoba LeetCode tapi masih stuck.</p>
+              <div class="pmeta">
+                <div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--green));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#fff">NM</div>
+                <span>nadhilah_m</span><span>·</span><span>1 hari lalu</span><span>·</span><span>0 balasan</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- FORUM SIDEBAR -->
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="cardsm">
+        <div style="font-size:10.5px;font-weight:600;color:var(--text3);margin-bottom:11px;letter-spacing:.5px;text-transform:uppercase">Statistik Forum</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="text-align:center;padding:9px;background:var(--bg3);border-radius:8px"><div style="font-size:18px;font-weight:700;color:var(--purple)">247</div><div style="font-size:10px;color:var(--text3)">Total Post</div></div>
+          <div style="text-align:center;padding:9px;background:var(--bg3);border-radius:8px"><div style="font-size:18px;font-weight:700;color:var(--teal)">89</div><div style="font-size:10px;color:var(--text3)">Terjawab</div></div>
+          <div style="text-align:center;padding:9px;background:var(--bg3);border-radius:8px"><div style="font-size:18px;font-weight:700;color:var(--green)">1.2k</div><div style="font-size:10px;color:var(--text3)">Upvote</div></div>
+          <div style="text-align:center;padding:9px;background:var(--bg3);border-radius:8px"><div style="font-size:18px;font-weight:700;color:var(--amber)">42</div><div style="font-size:10px;color:var(--text3)">Aktif Hari Ini</div></div>
+        </div>
+      </div>
+      <div class="cardsm">
+        <div style="font-size:10.5px;font-weight:600;color:var(--text3);margin-bottom:10px;letter-spacing:.5px;text-transform:uppercase">Tag Populer</div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px">
+          <span class="badge bt">Sorting</span><span class="badge bp">Linked List</span><span class="badge ba">DP</span><span class="badge bg">Binary Search</span><span class="badge br">Graph</span><span class="badge bgr">OOP</span><span class="badge bp">BST</span><span class="badge bt">Rekursi</span>
+        </div>
+      </div>
+      <div class="cardsm">
+        <div style="font-size:10.5px;font-weight:600;color:var(--text3);margin-bottom:10px;letter-spacing:.5px;text-transform:uppercase">Top Kontributor</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--teal));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff">AK</div>
+            <div style="flex:1"><div style="font-size:12px;font-weight:500">aditya_k</div><div style="font-size:10.5px;color:var(--text3)">42 post</div></div>
+            <span class="badge ba">🏆 1st</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--green));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff">LJ</div>
+            <div style="flex:1"><div style="font-size:12px;font-weight:500">Lionel_J</div><div style="font-size:10.5px;color:var(--text3)">28 post</div></div>
+            <span class="badge bgr">🥈 2nd</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POST NEW MODAL -->
+  <div id="fnewmodal" style="display:none;min-height:400px;background:rgba(0,0,0,.45);position:relative;margin-top:-100vh;justify-content:center;align-items:center;z-index:200">
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;width:520px;padding:26px;position:relative">
+      <div style="font-size:15px;font-weight:600;margin-bottom:18px">Buat Post Baru</div>
+      <div style="margin-bottom:12px"><label>Topik Kategori</label><select><option>Pilih topik...</option><option>Linked List</option><option>Sorting</option><option>Dynamic Programming</option></select></div>
+      <div style="margin-bottom:12px"><label>Judul Pertanyaan</label><input type="text" placeholder="Tuliskan pertanyaan kamu..."></div>
+      <div style="margin-bottom:12px"><label>Deskripsi</label><textarea rows="3" placeholder="Jelaskan konteks masalahmu..." style="resize:none"></textarea></div>
+      <div style="margin-bottom:18px"><label>Tag</label><input type="text" placeholder="contoh: Linked List, Pointer, C++"></div>
+      <div style="display:flex;justify-content:flex-end;gap:8px">
+        <button class="btn btnsec" onclick="hideFnew()">Batal</button>
+        <button class="btn btnprim">Publikasikan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ PROFILE ════════════════ -->
+<div id="page-profile" class="page">
+  <div class="topbar"><div class="tbtitle">Profile</div></div>
+  <div style="padding:24px;max-width:720px">
+    <div class="card" style="margin-bottom:16px">
+      <div style="display:flex;align-items:flex-start;gap:18px;margin-bottom:18px">
+        <div style="width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--teal));display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#fff;flex-shrink:0">LJ</div>
+        <div style="flex:1">
+          <div style="font-size:19px;font-weight:700;margin-bottom:3px">Lionel Jevoon</div>
+          <div style="font-size:13px;color:var(--text3);margin-bottom:7px">@lionelj · <span class="badge bp" style="margin-left:2px">Developer</span></div>
+          <div style="font-size:13px;color:var(--text2);line-height:1.5">CS student & indie developer. Building Structify for fun and learning.</div>
+        </div>
+        <button class="btn btnsec btnsm"><i class="ti ti-edit" aria-hidden="true"></i>Edit Profil</button>
+      </div>
+      <div class="divider"></div>
+      <div class="g4">
+        <div style="text-align:center"><div style="font-size:21px;font-weight:700;color:var(--purple)">24</div><div style="font-size:11px;color:var(--text3)">Topik Selesai</div></div>
+        <div style="text-align:center"><div style="font-size:21px;font-weight:700;color:var(--teal)">31</div><div style="font-size:11px;color:var(--text3)">Quiz Dimainkan</div></div>
+        <div style="text-align:center"><div style="font-size:21px;font-weight:700;color:var(--green)">78%</div><div style="font-size:11px;color:var(--text3)">Avg Score</div></div>
+        <div style="text-align:center"><div style="font-size:21px;font-weight:700;color:var(--amber)">7</div><div style="font-size:11px;color:var(--text3)">Forum Posts</div></div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="stitle" style="font-size:13px">Riwayat Quiz Terbaru</div>
+        <table class="dtable">
+          <thead><tr><th>Topik</th><th>Skor</th><th>Tanggal</th></tr></thead>
+          <tbody>
+            <tr><td style="font-size:12.5px">Binary Search Tree</td><td><span style="color:var(--green);font-weight:600">96%</span></td><td style="color:var(--text3);font-size:12px">Hari ini</td></tr>
+            <tr><td style="font-size:12.5px">Quick Sort</td><td><span style="color:var(--amber);font-weight:600">72%</span></td><td style="color:var(--text3);font-size:12px">Kemarin</td></tr>
+            <tr><td style="font-size:12.5px">Dynamic Programming</td><td><span style="color:var(--red);font-weight:600">44%</span></td><td style="color:var(--text3);font-size:12px">2 hari lalu</td></tr>
+            <tr><td style="font-size:12.5px">Merge Sort</td><td><span style="color:var(--green);font-weight:600">88%</span></td><td style="color:var(--text3);font-size:12px">3 hari lalu</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="stitle" style="font-size:13px">Edit Profil</div>
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <div><label>Nama</label><input type="text" value="Lionel Jevoon"></div>
+          <div><label>Username</label><input type="text" value="lionelj"></div>
+          <div><label>Bio</label><textarea rows="2" style="resize:none">CS student & indie developer.</textarea></div>
+          <button class="btn btnprim btnsm" style="width:fit-content">Simpan Perubahan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ ADMIN ════════════════ -->
+<div id="page-admin" class="page">
+  <div class="topbar">
+    <div class="tbtitle">Admin Panel</div>
+    <div style="display:flex;gap:6px">
+      <button class="btn btnsm" id="atb-analytics" onclick="setAt('analytics')" style="background:var(--purple-light);color:var(--purple);border:1px solid var(--purple-mid)"><i class="ti ti-chart-bar" aria-hidden="true"></i>Analytics</button>
+      <button class="btn btnsec btnsm" id="atb-questions" onclick="setAt('questions')"><i class="ti ti-bolt" aria-hidden="true"></i>Soal Builder</button>
+      <button class="btn btnsec btnsm" id="atb-users" onclick="setAt('users')"><i class="ti ti-users" aria-hidden="true"></i>Kelola User</button>
+    </div>
+  </div>
+  <div style="padding:24px">
+
+    <!-- ANALYTICS -->
+    <div id="at-analytics">
+      <div class="g4" style="margin-bottom:20px">
+        <div class="statcard"><div class="statlabel"><i class="ti ti-users" aria-hidden="true"></i>Total Users</div><div class="statval" style="color:var(--purple)">1,284</div><div class="statsub"><b style="color:var(--green)">+47 minggu ini</b></div></div>
+        <div class="statcard"><div class="statlabel"><i class="ti ti-activity" aria-hidden="true"></i>Aktif 30 Hari</div><div class="statval" style="color:var(--teal)">389</div><div class="statsub">30.3% dari total</div></div>
+        <div class="statcard"><div class="statlabel"><i class="ti ti-bolt" aria-hidden="true"></i>Total Quiz</div><div class="statval" style="color:var(--green)">6,471</div><div class="statsub">Avg score <b style="color:var(--green)">71%</b></div></div>
+        <div class="statcard"><div class="statlabel"><i class="ti ti-user-plus" aria-hidden="true"></i>User Baru Minggu Ini</div><div class="statval" style="color:var(--amber)">47</div><div class="statsub"><b style="color:var(--green)">+12%</b> vs lalu</div></div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="stitle" style="font-size:13px">🏆 Topik Terpopuler</div>
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:12px;color:var(--text3);min-width:20px">1.</span>
+              <div style="flex:1"><div style="font-size:12.5px;margin-bottom:4px;font-weight:500">Binary Search Tree</div><div class="pbar" style="height:5px"><div class="pfill" style="width:85%;background:var(--purple)"></div></div></div>
+              <span class="badge bp">847</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:12px;color:var(--text3);min-width:20px">2.</span>
+              <div style="flex:1"><div style="font-size:12.5px;margin-bottom:4px;font-weight:500">Quick Sort</div><div class="pbar" style="height:5px"><div class="pfill" style="width:72%;background:var(--teal)"></div></div></div>
+              <span class="badge bt">719</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:12px;color:var(--text3);min-width:20px">3.</span>
+              <div style="flex:1"><div style="font-size:12.5px;margin-bottom:4px;font-weight:500">Linked List</div><div class="pbar" style="height:5px"><div class="pfill" style="width:61%;background:var(--green)"></div></div></div>
+              <span class="badge bg">612</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:12px;color:var(--text3);min-width:20px">4.</span>
+              <div style="flex:1"><div style="font-size:12.5px;margin-bottom:4px;font-weight:500">Dynamic Programming</div><div class="pbar" style="height:5px"><div class="pfill" style="width:48%;background:var(--amber)"></div></div></div>
+              <span class="badge ba">481</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:12px;color:var(--text3);min-width:20px">5.</span>
+              <div style="flex:1"><div style="font-size:12.5px;margin-bottom:4px;font-weight:500">Merge Sort</div><div class="pbar" style="height:5px"><div class="pfill" style="width:39%;background:var(--red)"></div></div></div>
+              <span class="badge br">390</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="stitle" style="font-size:13px">📈 Rata-rata Skor Per Topik</div>
+          <table class="dtable">
+            <thead><tr><th>Topik</th><th>Avg Score</th><th>Attempts</th></tr></thead>
+            <tbody>
+              <tr><td style="font-size:12px">Binary Search Tree</td><td><span style="color:var(--green);font-weight:600">83%</span></td><td style="color:var(--text3)">847</td></tr>
+              <tr><td style="font-size:12px">Linked List</td><td><span style="color:var(--green);font-weight:600">79%</span></td><td style="color:var(--text3)">612</td></tr>
+              <tr><td style="font-size:12px">Quick Sort</td><td><span style="color:var(--amber);font-weight:600">68%</span></td><td style="color:var(--text3)">719</td></tr>
+              <tr><td style="font-size:12px">Dynamic Programming</td><td><span style="color:var(--red);font-weight:600">51%</span></td><td style="color:var(--text3)">481</td></tr>
+              <tr><td style="font-size:12px">Graph</td><td><span style="color:var(--red);font-weight:600">48%</span></td><td style="color:var(--text3)">312</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOAL BUILDER -->
+    <div id="at-questions" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+        <div class="stitle" style="margin-bottom:0">Soal Builder</div>
+        <button class="btn btnprim btnsm" onclick="togAqform()"><i class="ti ti-plus" aria-hidden="true"></i>Tambah Soal</button>
+      </div>
+      <div id="aqform" style="display:none;background:var(--purple-light);border:1px solid var(--purple-mid);border-radius:12px;padding:18px;margin-bottom:16px">
+        <div style="font-size:13.5px;font-weight:600;margin-bottom:14px;color:var(--purple)">Form Tambah Soal Baru</div>
+        <div class="g2" style="margin-bottom:11px">
+          <div><label>Topik</label><select><option>Pilih topik...</option><option>Linked List</option><option>Binary Search Tree</option><option>Quick Sort</option></select></div>
+          <div><label>Timer (detik)</label><input type="text" value="30"></div>
+        </div>
+        <div style="margin-bottom:11px"><label>Teks Soal</label><textarea rows="2" style="resize:none">Apa time complexity dari operasi insertHead() pada Singly Linked List?</textarea></div>
+        <div class="g2" style="margin-bottom:5px">
+          <div><label>A.</label><input type="text" value="O(n) — traverse seluruh list"></div>
+          <div><label>B.</label><input type="text" value="O(1) — update pointer head"></div>
+          <div style="margin-top:8px"><label>C.</label><input type="text" value="O(log n) — binary search"></div>
+          <div style="margin-top:8px"><label>D.</label><input type="text" value="O(n²) — nested loop"></div>
+        </div>
+        <div style="margin-bottom:14px;margin-top:11px"><label>Jawaban Benar</label><select style="width:auto"><option>A</option><option selected>B</option><option>C</option><option>D</option></select></div>
+        <div style="display:flex;gap:8px"><button class="btn btnprim btnsm">Simpan Soal</button><button class="btn btnsec btnsm" onclick="togAqform()">Batal</button></div>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <input type="text" placeholder="Cari soal..." style="width:220px">
+          <select style="width:auto;font-size:12px"><option>Semua Topik</option><option>Linked List</option><option>BST</option></select>
+        </div>
+        <table class="dtable">
+          <thead><tr><th>Soal</th><th>Topik</th><th>Jawaban</th><th>Timer</th><th>Aksi</th></tr></thead>
+          <tbody>
+            <tr><td style="font-size:12px;max-width:260px">Apa time complexity insertHead() pada Linked List?</td><td><span class="badge bp">Linked List</span></td><td><span class="badge bg">B</span></td><td style="color:var(--text3);font-size:12px">30s</td><td><div style="display:flex;gap:5px"><button class="btn btnsec btnsm btnicon"><i class="ti ti-edit" style="font-size:14px" aria-hidden="true"></i></button><button class="btn br btnsm btnicon" style="background:var(--red-light);border:1px solid #FCA5A5"><i class="ti ti-trash" style="font-size:14px;color:var(--red)" aria-hidden="true"></i></button></div></td></tr>
+            <tr><td style="font-size:12px;max-width:260px">Apa yang dimaksud dengan balanced BST?</td><td><span class="badge bt">BST</span></td><td><span class="badge bg">A</span></td><td style="color:var(--text3);font-size:12px">45s</td><td><div style="display:flex;gap:5px"><button class="btn btnsec btnsm btnicon"><i class="ti ti-edit" style="font-size:14px" aria-hidden="true"></i></button><button class="btn btnsm btnicon" style="background:var(--red-light);border:1px solid #FCA5A5"><i class="ti ti-trash" style="font-size:14px;color:var(--red)" aria-hidden="true"></i></button></div></td></tr>
+            <tr><td style="font-size:12px;max-width:260px">Worst case Quick Sort terjadi saat pivot memilih elemen...?</td><td><span class="badge ba">Sorting</span></td><td><span class="badge bg">C</span></td><td style="color:var(--text3);font-size:12px">30s</td><td><div style="display:flex;gap:5px"><button class="btn btnsec btnsm btnicon"><i class="ti ti-edit" style="font-size:14px" aria-hidden="true"></i></button><button class="btn btnsm btnicon" style="background:var(--red-light);border:1px solid #FCA5A5"><i class="ti ti-trash" style="font-size:14px;color:var(--red)" aria-hidden="true"></i></button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- USER MANAGEMENT -->
+    <div id="at-users" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+        <div class="stitle" style="margin-bottom:0">Kelola User</div>
+        <div style="display:flex;gap:8px">
+          <input type="text" placeholder="Cari nama, email..." style="width:190px">
+          <select style="width:auto"><option>Semua Role</option><option>User</option><option>Admin</option></select>
+        </div>
+      </div>
+      <div class="card">
+        <table class="dtable">
+          <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Bergabung</th><th>Aksi</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--teal));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff">AK</div><div><div style="font-size:13px;font-weight:500">Aditya Kusuma</div><div style="font-size:11px;color:var(--text3)">@aditya_k</div></div></div></td>
+              <td style="color:var(--text3);font-size:12px">aditya@email.com</td>
+              <td><span class="badge bgr">User</span></td>
+              <td><span class="badge bg">Aktif</span></td>
+              <td style="color:var(--text3);font-size:12px">Mar 2025</td>
+              <td><div style="display:flex;gap:5px"><button class="btn btnsec btnsm" style="font-size:11px;padding:4px 9px">Promote</button><button class="btn btnsm" style="font-size:11px;padding:4px 9px;background:var(--red-light);color:var(--red);border:1px solid #FCA5A5">Ban</button></div></td>
+            </tr>
+            <tr>
+              <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--red));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff">RD</div><div><div style="font-size:13px;font-weight:500">Rizky Darmawan</div><div style="font-size:11px;color:var(--text3)">@rizky_d</div></div></div></td>
+              <td style="color:var(--text3);font-size:12px">rizky@email.com</td>
+              <td><span class="badge bp">Admin</span></td>
+              <td><span class="badge bg">Aktif</span></td>
+              <td style="color:var(--text3);font-size:12px">Jan 2025</td>
+              <td><div style="display:flex;gap:5px"><button class="btn btnsec btnsm" style="font-size:11px;padding:4px 9px">Demote</button></div></td>
+            </tr>
+            <tr>
+              <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--text3)">NM</div><div><div style="font-size:13px;font-weight:500;opacity:.5">Nadhilah Maulida</div><div style="font-size:11px;color:var(--text3)">@nadhilah_m</div></div></div></td>
+              <td style="color:var(--text3);font-size:12px">nadhilah@email.com</td>
+              <td><span class="badge bgr">User</span></td>
+              <td><span class="badge br">Banned</span></td>
+              <td style="color:var(--text3);font-size:12px">Apr 2025</td>
+              <td><div style="display:flex;gap:5px"><button class="btn btnsm" style="font-size:11px;padding:4px 9px;background:var(--green-light);color:var(--green);border:1px solid #BBF7D0">Unban</button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</main>
+</div>
+
+<script>
+function gop(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  const pg=document.getElementById('page-'+id);
+  if(pg) pg.classList.add('active');
+  const map={dashboard:0,cheatsheet:1,quiz:2,progress:3,forum:4,profile:5,admin:6};
+  const items=document.querySelectorAll('.ni');
+  if(map[id]!==undefined && items[map[id]]) items[map[id]].classList.add('active');
+}
+
+function setLang(l){
+  const py=document.getElementById('cpython');
+  const cpp=document.getElementById('ccpp');
+  const fn=document.getElementById('cfilename');
+  const bpy=document.getElementById('clb-py');
+  const bcpp=document.getElementById('clb-cpp');
+  const bbpy=document.getElementById('btn-py');
+  const bbcpp=document.getElementById('btn-cpp');
+  if(l==='py'){
+    if(py)py.style.display='';
+    if(cpp)cpp.style.display='none';
+    if(fn)fn.textContent='linked_list.py';
+    if(bpy){bpy.classList.add('active');}
+    if(bcpp){bcpp.classList.remove('active');}
+    if(bbpy){bbpy.className='btn btnsec btnsm';}
+    if(bbcpp){bbcpp.className='btn btnprim btnsm';}
+  } else {
+    if(py)py.style.display='none';
+    if(cpp)cpp.style.display='';
+    if(fn)fn.textContent='linked_list.cpp';
+    if(bpy){bpy.classList.remove('active');}
+    if(bcpp){bcpp.classList.add('active');}
+    if(bbpy){bbpy.className='btn btnprim btnsm';}
+    if(bbcpp){bbcpp.className='btn btnsec btnsm';}
+  }
+}
+
+function selopt(el,letter){
+  document.querySelectorAll('.qopt').forEach(o=>{
+    o.classList.remove('sel');
+    const l=o.querySelector('.oletter');
+    if(l){l.style.background='';l.style.color='';}
+  });
+  el.classList.add('sel');
+  const l=document.getElementById('o'+letter);
+  if(l){l.style.background='var(--purple)';l.style.color='#fff';}
+}
+
+function showQres(){
+  const r=document.getElementById('qresult');
+  if(r) r.style.display='block';
+  const opts=document.querySelectorAll('.qopt');
+  opts.forEach(o=>o.classList.remove('sel'));
+  if(opts[1]){opts[1].classList.add('correct');const l=opts[1].querySelector('.oletter');if(l){l.style.background='var(--green)';l.style.color='#fff';}}
+}
+
+function setAt(tab){
+  ['analytics','questions','users'].forEach(t=>{
+    const el=document.getElementById('at-'+t);
+    const btn=document.getElementById('atb-'+t);
+    if(el)el.style.display=t===tab?'block':'none';
+    if(btn){
+      if(t===tab){btn.style.background='var(--purple-light)';btn.style.color='var(--purple)';btn.style.border='1px solid var(--purple-mid)';}
+      else{btn.style.background='';btn.style.color='';btn.style.border='';}
+    }
+  });
+}
+
+function togAqform(){
+  const f=document.getElementById('aqform');
+  if(f) f.style.display=f.style.display==='none'?'block':'none';
+}
+
+function showFnew(){
+  const m=document.getElementById('fnewmodal');
+  if(m){m.style.display='flex';m.style.marginTop='0';}
+}
+function hideFnew(){
+  const m=document.getElementById('fnewmodal');
+  if(m){m.style.display='none';m.style.marginTop='-100vh';}
+}
+
+let tv=18;
+const interval=setInterval(()=>{
+  tv=tv>0?tv-1:30;
+  const tn=document.getElementById('tnum');
+  const tc=document.getElementById('tcirc');
+  if(tn)tn.textContent=tv+'s';
+  if(tc){
+    const pct=tv/30;
+    const off=126-(126*pct);
+    tc.style.strokeDashoffset=off;
+    tc.style.stroke=tv<=8?'var(--red)':tv<=15?'var(--amber)':'var(--purple)';
+  }
+},1000);
+</script>

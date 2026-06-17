@@ -11,9 +11,13 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminAnalyticsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ForumPostController;
+use App\Http\Controllers\TagController;
+use App\Http\Controllers\GoogleAuthController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login',    [AuthController::class, 'login']);
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('/reset-password',  [AuthController::class, 'resetPassword']);
 
 Route::get('/tracks',                 [TrackController::class, 'index']);
 Route::get('/tracks/{slug}',          [TrackController::class, 'show']);
@@ -23,6 +27,12 @@ Route::get('/topics/{slug}',          [TopicController::class, 'show']);
 Route::get('/forum',                    [ForumPostController::class, 'index']);
 Route::get('/forum/{id}',              [ForumPostController::class, 'show']);
 Route::get('/topics/{id}/forum',       [ForumPostController::class, 'byTopic']);
+
+Route::get('/tags',          [TagController::class, 'index']);
+Route::get('/tags/{slug}',   [TagController::class, 'show']);
+
+Route::get('/auth/google',          [GoogleAuthController::class, 'redirect']);
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);

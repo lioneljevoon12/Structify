@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Notifications\ResetPasswordNotification;
 
 class User extends Authenticatable
 {
@@ -19,7 +20,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
     'name', 'email', 'password', 'role',
-    'username', 'avatar', 'bio','is_banned',
+    'username', 'avatar', 'bio','is_banned', 'google_id',
     ];
 
     protected $attributes = [
@@ -59,5 +60,9 @@ class User extends Authenticatable
         public function upvotedPosts()  {
             return $this->belongsToMany(ForumPost::class, 'forum_post_upvotes')
                         ->withTimestamps();
+        }
+
+        public function sendPasswordResetNotification($token) {
+            $this->notify(new ResetPasswordNotification($token));
         }
 }
