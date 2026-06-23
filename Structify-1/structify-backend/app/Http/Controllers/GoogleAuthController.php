@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Str;
+use App\Http\Requests\GoogleMobileLoginRequest;
+use Google\Client as GoogleClient;
 
 class GoogleAuthController extends Controller
 {
@@ -59,4 +61,64 @@ class GoogleAuthController extends Controller
         $frontendUrl = config('app.frontend_url', 'http://localhost:5173');
         return redirect("{$frontendUrl}/auth/callback?token={$token}");
     }
+
+    public function mobileLogin(GoogleMobileLoginRequest $request)
+{
+    $client = new GoogleClient(['client_id' => config('services.google.client_id')]);
+
+    try {
+        $payload = $client->verifyIdToken($request->id_token);
+    } catch (\Exception $e) {
+        $payload = false;
+    }
+
+    if (!$payload) {
+        return response()->json([
+            'message' => 'Token Google tidak valid.'
+        ], 401);
+    }
+
+    $googleId = $payload['sub'];
+    $email    = $payload['email'];
+    $name     = $payload['name'] ?? 'User';
+    $picture  = $payload['picture'] ?? null;
+
+    $user = User::where('google_id', $googleId)
+        ->orWhere('email', $email)
+        ->first();
+
+    if ($user) {
+        if (!$user->google_id) {
+            $user->update(['google_id' => $googleId]);
+        }
+    } else {
+        $user = User::create([
+            'name'      => $name,
+            'email'     => $email,
+            'google_id' => $googleId,
+            'username'  => Str::slug($name) . '_' . Str::random(4),
+            'password'  => null,
+        ]);
+    }
+
+    if ($user->is_banned) {
+        return response()->json([
+            'message' => 'Akun kamu telah dibanned. Hubungi admin.'
+        ], 403);
+    }
+
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    return response()->json([
+        'message' => 'Login Google berhasil',
+        'user'    => [
+            'id'       => $user->id,
+            'name'     => $user->name,
+            'username' => $user->username,
+            'email'    => $user->email,
+            'role'     => $user->role,
+        ],
+        'token' => $token,
+    ]);
+}
 }

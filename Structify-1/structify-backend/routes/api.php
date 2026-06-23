@@ -34,6 +34,9 @@ Route::get('/tags/{slug}',   [TagController::class, 'show']);
 Route::get('/auth/google',          [GoogleAuthController::class, 'redirect']);
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
 
+// Mobile (Flutter)
+Route::post('/auth/google/mobile', [GoogleAuthController::class, 'mobileLogin']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me',      [AuthController::class, 'me']);
