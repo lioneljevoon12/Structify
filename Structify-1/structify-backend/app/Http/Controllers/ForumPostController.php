@@ -8,11 +8,10 @@ use App\Http\Requests\StoreForumPostRequest;
 use App\Http\Requests\StoreReplyRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Http\Resources\ForumPostResource;
 
 class ForumPostController extends Controller
 {
-    
-
     public function index(Request $request)
     {
         $userId = $request->user()?->id;
@@ -44,7 +43,7 @@ class ForumPostController extends Controller
             ->orderByDesc('created_at')
             ->paginate(15);
 
-        return response()->json($posts);
+        return ForumPostResource::collection($posts);
     }
 
     public function store(StoreForumPostRequest $request)
@@ -56,7 +55,6 @@ class ForumPostController extends Controller
             'body'     => $request->body,
         ]);
 
-        // Handle tags
         if ($request->has('tags')) {
             $tagIds = collect($request->tags)->map(function ($tagName) {
                 return Tag::firstOrCreate(
@@ -75,11 +73,11 @@ class ForumPostController extends Controller
 
         return response()->json([
             'message' => 'Post berhasil dibuat',
-            'data'    => $post,
+            'data'    => new ForumPostResource($post),
         ], 201);
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $userId = $request->user()?->id;
 
@@ -99,7 +97,7 @@ class ForumPostController extends Controller
         )
         ->findOrFail($id);
 
-        return response()->json(['data' => $post]);
+        return new ForumPostResource($post);
     }
 
     public function reply(StoreReplyRequest $request, $id)

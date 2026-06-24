@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Track;
 use Illuminate\Http\Request;
+use App\Http\Resources\TrackResource;
 
 class TrackController extends Controller
 {
     public function index()
     {
         $tracks = Track::withCount('topics')->get();
-
-        return response()->json(['data' => $tracks]);
+        return TrackResource::collection($tracks);
     }
 
     public function show($slug)
@@ -19,7 +19,6 @@ class TrackController extends Controller
         $track = Track::where('slug', $slug)
             ->withCount('topics')
             ->firstOrFail();
-
-        return response()->json(['data' => $track]);
+        return new TrackResource($track);
     }
 }

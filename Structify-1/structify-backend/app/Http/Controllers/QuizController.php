@@ -8,6 +8,7 @@ use App\Models\QuizAttempt;
 use App\Models\QuizAttemptAnswer;
 use App\Http\Requests\QuizSubmitRequest;
 use Illuminate\Http\Request;
+use App\Http\Resources\QuizAttemptResource;
 
 class QuizController extends Controller
 {
@@ -77,14 +78,15 @@ class QuizController extends Controller
     }
 
     public function history(Request $request)
-    {
-        $history = QuizAttempt::where('user_id', $request->user()->id)
-            ->with('topic:id,title,slug')
-            ->orderByDesc('completed_at')
-            ->get();
+{
+    $history = QuizAttempt::where('user_id', $request->user()->id)
+        ->with('topic:id,title,slug')
+        ->orderByDesc('completed_at')
+        ->get();
 
-        return response()->json(['data' => $history]);
-    }
+    return QuizAttemptResource::collection($history);
+}
+
 
     public function detail(Request $request, $id)
     {

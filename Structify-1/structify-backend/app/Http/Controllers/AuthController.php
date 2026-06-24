@@ -11,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use Illuminate\Support\Facades\Password;
+use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
@@ -78,7 +79,7 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
-        return response()->json($request->user());
+        return new UserResource($request->user());
     }
 
     public function forgotPassword(ForgotPasswordRequest $request)
