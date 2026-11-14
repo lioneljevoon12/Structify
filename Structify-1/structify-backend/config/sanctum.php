@@ -46,7 +46,8 @@ return [
     |
     */
 
-    'expiration' => null,
+    // Default 30 hari. Set SANCTUM_EXPIRATION (dalam menit) untuk mengubah.
+    'expiration' => (int) env('SANCTUM_EXPIRATION', 60 * 24 * 30),
 
     /*
     |--------------------------------------------------------------------------

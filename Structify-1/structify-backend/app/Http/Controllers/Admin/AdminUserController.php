@@ -12,9 +12,11 @@ class AdminUserController extends Controller
     {
         $users = User::query()
             ->when($request->search, fn($q) =>
-                $q->where('name', 'like', "%{$request->search}%")
-                  ->orWhere('email', 'like', "%{$request->search}%")
-                  ->orWhere('username', 'like', "%{$request->search}%")
+                $q->where(fn($q) =>
+                    $q->where('name', 'like', "%{$request->search}%")
+                      ->orWhere('email', 'like', "%{$request->search}%")
+                      ->orWhere('username', 'like', "%{$request->search}%")
+                )
             )
             ->when($request->role, fn($q) =>
                 $q->where('role', $request->role)
@@ -53,6 +55,11 @@ class AdminUserController extends Controller
         }
 
         $user->update(['is_banned' => !$user->is_banned]);
+
+        // User yang dibanned langsung kehilangan semua sesi login.
+        if ($user->is_banned) {
+            $user->tokens()->delete();
+        }
 
         $status = $user->is_banned ? 'dibanned' : 'di-unban';
 

@@ -44,5 +44,16 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
+
+        // Login, register, reset password: 10/menit per IP+email dan 30/menit per IP
+        // untuk menahan brute force dan spam email reset.
+        RateLimiter::for('auth', function (Request $request) {
+            $email = strtolower((string) $request->input('email'));
+
+            return [
+                Limit::perMinute(10)->by('auth:'.$request->ip().'|'.$email),
+                Limit::perMinute(30)->by('auth-ip:'.$request->ip()),
+            ];
+        });
     }
 }

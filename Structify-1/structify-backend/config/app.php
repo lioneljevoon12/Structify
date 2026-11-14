@@ -56,6 +56,10 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    // URL frontend (React/Flutter web), dipakai untuk redirect login Google
+    // dan link reset password.
+    'frontend_url' => env('FRONTEND_URL', 'http://localhost:5173'),
+
     'asset_url' => env('ASSET_URL', '/'),
 
     /*

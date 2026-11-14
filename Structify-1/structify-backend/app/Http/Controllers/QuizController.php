@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Question;
 use App\Models\Topic;
 use App\Models\QuizAttempt;
-use App\Models\QuizAttemptAnswer;
 use App\Http\Requests\QuizSubmitRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Resources\QuizAttemptResource;
 
 class QuizController extends Controller
@@ -30,8 +30,8 @@ class QuizController extends Controller
     {
         $topic = Topic::findOrFail($request->topic_id);
 
-        $questionIds = collect($request->answers)->pluck('question_id');
-        $questions   = Question::whereIn('id', $questionIds)->get()->keyBy('id');
+        // Validasi sudah memastikan question_id unik dan milik topik ini.
+        $questions = Question::where('topic_id', $topic->id)->get()->keyBy('id');
 
         $correctCount = 0;
         $answerRecords = [];
@@ -50,23 +50,24 @@ class QuizController extends Controller
             ];
         }
 
-        $total = count($answerRecords);
+        // Skor dihitung dari semua soal di topik; soal yang tidak dijawab dihitung salah.
+        $total = $questions->count();
         $score = $total > 0 ? round(($correctCount / $total) * 100, 2) : 0;
 
-        $attempt = QuizAttempt::create([
-            'user_id'         => $request->user()->id,
-            'topic_id'        => $topic->id,
-            'score'           => $score,
-            'total_questions' => $total,
-            'correct_answers' => $correctCount,
-            'completed_at'    => now(),
-        ]);
+        $attempt = DB::transaction(function () use ($request, $topic, $score, $total, $correctCount, $answerRecords) {
+            $attempt = QuizAttempt::create([
+                'user_id'         => $request->user()->id,
+                'topic_id'        => $topic->id,
+                'score'           => $score,
+                'total_questions' => $total,
+                'correct_answers' => $correctCount,
+                'completed_at'    => now(),
+            ]);
 
-        foreach ($answerRecords as $record) {
-            QuizAttemptAnswer::create(array_merge(
-                $record, ['quiz_attempt_id' => $attempt->id]
-            ));
-        }
+            $attempt->answers()->createMany($answerRecords);
+
+            return $attempt;
+        });
 
         return response()->json([
             'message'         => 'Quiz selesai',

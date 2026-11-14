@@ -14,7 +14,8 @@ class ForumPostController extends Controller
 {
     public function index(Request $request)
     {
-        $userId = $request->user()?->id;
+        // Route ini publik (di luar auth:sanctum), jadi baca token secara opsional.
+        $userId = auth('sanctum')->id();
 
         $posts = ForumPost::whereNull('parent_id')
             ->with([
@@ -36,9 +37,12 @@ class ForumPostController extends Controller
                     $q->where('slug', $request->tag)
                 )
             )
+            // Dikelompokkan supaya orWhere tidak membatalkan filter lain.
             ->when($request->search, fn($q) =>
-                $q->where('title', 'like', "%{$request->search}%")
-                ->orWhere('body', 'like', "%{$request->search}%")
+                $q->where(fn($q) =>
+                    $q->where('title', 'like', "%{$request->search}%")
+                      ->orWhere('body', 'like', "%{$request->search}%")
+                )
             )
             ->orderByDesc('created_at')
             ->paginate(15);
@@ -79,7 +83,7 @@ class ForumPostController extends Controller
 
     public function show(Request $request, $id)
     {
-        $userId = $request->user()?->id;
+        $userId = auth('sanctum')->id();
 
         $post = ForumPost::with([
             'user:id,name,username,avatar',
