@@ -5,13 +5,13 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [
-        'http://localhost:5173',      // React Vite dev
-        'http://localhost:3000',      // React alt port
-        'http://127.0.0.1:5173',     // React Vite alt
-        'http://localhost:8081',      // Flutter web dev
-        'http://10.0.2.2:8000',      // Flutter Android emulator akses localhost
-    ],
+    // Di production isi CORS_ALLOWED_ORIGINS dengan domain frontend, dipisah koma.
+    // Default-nya origin development:
+    // React Vite (5173), React alt (3000), Flutter web (8081), Android emulator (10.0.2.2).
+    'allowed_origins' => array_values(array_filter(array_map('trim', explode(',', env(
+        'CORS_ALLOWED_ORIGINS',
+        'http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://localhost:8081,http://10.0.2.2:8000'
+    ))))),
 
     'allowed_origins_patterns' => [],
 

@@ -14,10 +14,19 @@ use App\Http\Controllers\ForumPostController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\GoogleAuthController;
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login',    [AuthController::class, 'login']);
-Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
-Route::post('/reset-password',  [AuthController::class, 'resetPassword']);
+// Endpoint auth punya rate limit lebih ketat (lihat RouteServiceProvider).
+Route::middleware('throttle:auth')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login',    [AuthController::class, 'login']);
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+    Route::post('/reset-password',  [AuthController::class, 'resetPassword']);
+
+    // Tukar kode sekali pakai dari redirect Google (web) dengan token
+    Route::post('/auth/google/exchange', [GoogleAuthController::class, 'exchange']);
+
+    // Mobile (Flutter)
+    Route::post('/auth/google/mobile', [GoogleAuthController::class, 'mobileLogin']);
+});
 
 Route::get('/tracks',                 [TrackController::class, 'index']);
 Route::get('/tracks/{slug}',          [TrackController::class, 'show']);
@@ -34,10 +43,7 @@ Route::get('/tags/{slug}',   [TagController::class, 'show']);
 Route::get('/auth/google',          [GoogleAuthController::class, 'redirect']);
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
 
-// Mobile (Flutter)
-Route::post('/auth/google/mobile', [GoogleAuthController::class, 'mobileLogin']);
-
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'not.banned'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me',      [AuthController::class, 'me']);
 

@@ -84,19 +84,15 @@ class AuthController extends Controller
 
     public function forgotPassword(ForgotPasswordRequest $request)
     {
-        $status = Password::sendResetLink(
+        Password::sendResetLink(
             $request->only('email')
         );
 
-        if ($status === Password::RESET_LINK_SENT) {
-            return response()->json([
-                'message' => 'Link reset password telah dikirim ke email kamu.'
-            ]);
-        }
-
+        // Selalu balas sama, supaya endpoint ini tidak bisa dipakai untuk mengecek
+        // apakah sebuah email terdaftar.
         return response()->json([
-            'message' => 'Gagal mengirim link reset password.'
-        ], 400);
+            'message' => 'Kalau email tersebut terdaftar, link reset password sudah dikirim.'
+        ]);
     }
 
     public function resetPassword(ResetPasswordRequest $request)
@@ -107,6 +103,9 @@ class AuthController extends Controller
                 $user->forceFill([
                     'password' => Hash::make($password),
                 ])->save();
+
+                // Password diganti: semua sesi lama dicabut.
+                $user->tokens()->delete();
             }
         );
 

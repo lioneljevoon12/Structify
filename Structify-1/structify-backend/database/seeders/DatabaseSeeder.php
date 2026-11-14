@@ -15,9 +15,17 @@ class DatabaseSeeder extends Seeder
         $this->call([
             TrackSeeder::class,
             TopicSeeder::class,
-            UserSeeder::class,      
             QuestionSeeder::class,
-            ForumSeeder::class,
         ]);
+
+        // UserSeeder berisi akun demo dengan password yang diketahui publik
+        // (termasuk admin), jadi hanya dijalankan di local/testing.
+        // Untuk production pakai: php artisan db:seed --class=AdminSeeder
+        if (app()->environment(['local', 'testing'])) {
+            $this->call([
+                UserSeeder::class,
+                ForumSeeder::class,
+            ]);
+        }
     }
 }
